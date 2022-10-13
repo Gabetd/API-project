@@ -19,6 +19,14 @@ const { handleValidationErrors } = require('../../utils/validation');
 // backend/routes/api/users.js
 // ...
 const validateSignup = [
+  check('firstName')
+  .exists({ checkFalsy: true })
+  .isString()
+  .withMessage('Please provide a valid firstName.'),
+  check('lastName')
+  .exists({ checkFalsy: true })
+  .isString()
+  .withMessage('Please provide a valid lastName.'),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
@@ -49,8 +57,8 @@ router.post(
   '/',
   validateSignup,
   async (req, res) => {
-    const { email, password, username } = req.body;
-    const user = await User.signup({ email, username, password });
+    const { firstName, lastName, email, password, username } = req.body;
+    const user = await User.signup({ firstName, lastName, email, username, password });
 
     await setTokenCookie(res, user);
 
