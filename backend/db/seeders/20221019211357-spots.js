@@ -18,8 +18,8 @@ module.exports = {
       city: 'Chesterfield',
       state: "Virginia",
       country: "United States",
-      latitude: "37.39",
-      longitude: "-77.69",
+      lat: "37.39",
+      lng: "-77.69",
       name: 'Tomahawk Creek',
       description: 'this is a test description',
       price: 340
