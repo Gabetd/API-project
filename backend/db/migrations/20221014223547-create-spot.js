@@ -11,10 +11,7 @@ module.exports = {
       },
       ownerId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
+        references: { model: 'Users', key: 'id' }
       },
       address: {
         type: Sequelize.STRING
@@ -28,10 +25,10 @@ module.exports = {
       country: {
         type: Sequelize.STRING
       },
-      lat: {
+      latitude: {
         type: Sequelize.DECIMAL
       },
-      lng: {
+      longitude: {
         type: Sequelize.DECIMAL
       },
       name: {
@@ -45,11 +42,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
