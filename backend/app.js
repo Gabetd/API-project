@@ -99,12 +99,6 @@ app.use((err, _req, res, _next) => {
 
 
 
-
-//
-// npx sequelize-cli model:generate --name User --attributes username:STRING,email:STRING,hashedPassword:BINARYSTRING
-
-
-
 // backend/app.js
 // ...
 
