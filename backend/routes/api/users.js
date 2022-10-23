@@ -59,9 +59,11 @@ router.post(
   async (req, res) => {
     const { firstName, lastName, email, password, username } = req.body;
     const user = await User.signup({ firstName, lastName, email, username, password });
-
+    // const aggregate = {}
+    // aggregate.token = ""
+    // Object.assign(User, aggregate)
     await setTokenCookie(res, user);
-
+    // user.token = ""
     return res.json({
       user,
     });

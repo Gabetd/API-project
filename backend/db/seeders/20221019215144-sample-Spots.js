@@ -63,7 +63,7 @@ module.exports = {
         price: 225
       },
       {
-        ownerId: 5,
+        ownerId: 4,
         address: '251 Summit Way',
         city: 'San Francisco',
         state: 'California',
@@ -75,7 +75,7 @@ module.exports = {
         price: 480
       },
       {
-        ownerId: 6,
+        ownerId: 4,
         address: '118 Middlefield Dr',
         city: 'San Francisco',
         state: 'California',

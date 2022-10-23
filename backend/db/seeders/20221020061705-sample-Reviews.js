@@ -14,16 +14,16 @@ module.exports = {
     */
      await queryInterface.bulkInsert('Reviews', [
       {
-        spotId: 1,
+        spotId: 4,
         userId: 2,
         review: 'Beautiful and clean home with incredible amenities!',
-        stars: 5
+        stars: 1
       },
       {
-        spotId: 2,
+        spotId: 4,
         userId: 3,
         review: 'Their place is amazing! My family of 6 were completely comfortable and felt so fortunate to find this wonderful retreat!',
-        stars: 5
+        stars: 3
       },
       {
         spotId: 3,
