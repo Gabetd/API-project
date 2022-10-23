@@ -55,18 +55,39 @@ const validateSignup = [
 // Sign up
 router.post(
   '/',
-  validateSignup,
+  // validateSignup,
   async (req, res) => {
     const { firstName, lastName, email, password, username } = req.body;
+    const inUse = User.findOne({
+      where: {
+        email: email
+      }
+    })
+    if(inUse){
+      res.status(403);
+      res.json({
+        "message": "User already exists",
+        "statusCode": 403,
+        "errors": {
+          "email": "User with that email already exists"
+        }
+      })
+    }
     const user = await User.signup({ firstName, lastName, email, username, password });
-    // const aggregate = {}
-    // aggregate.token = ""
-    // Object.assign(User, aggregate)
-    await setTokenCookie(res, user);
+
+    let mtobj = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+      token: null
+    }
+      mtobj.token = await setTokenCookie(res, user);
     // user.token = ""
-    return res.json({
-      user,
-    });
+    return res.json(
+      mtobj
+    );
   }
 );
 

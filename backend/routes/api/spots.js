@@ -36,7 +36,7 @@ const { requireAuth } = require('../../utils/auth');
 
 router.get('/current', requireAuth, async (req,res) => {
   const { user } = req;
-  const spot = await Spot.findAll({
+  const spots = await Spot.findAll({
     where: {
       ownerId: user.id
     },
@@ -51,12 +51,10 @@ router.get('/current', requireAuth, async (req,res) => {
       ],
       group: ["spot.id"]
     });
-    let result = {
-      spots: spot
-    }
-    console.log(result.spots.length)
+
+
   res.status(200);
-  res.json(result)
+  res.json({spots})
 
 });
 
@@ -67,7 +65,7 @@ router.get('/:spotId', async (req,res) => {
   //       {id: id},
   // });
 
-  let spot = await Spot.findOne({
+  let spots = await Spot.findOne({
     where: {
       id: id
     },
@@ -85,10 +83,8 @@ router.get('/:spotId', async (req,res) => {
       attibutes: ["id", "firstName", "lastName"]
     },
   ],
-
-
 })
-if(spot.id === null || !spot){
+if(spots.id === null || !spots){
   res.status(404);
   res.json({
     "message": "Spot couldn't be found",
@@ -98,7 +94,7 @@ if(spot.id === null || !spot){
 // spot = spot1.toJSON()
 // Object.assign(spot, spot2),
 res.status(200);
-res.json(spot)
+res.json(spots)
 
 });
 
@@ -116,7 +112,7 @@ router.get('/', async (req,res) => {
   group: ["spot.id"]
   })
   res.status(200);
-  res.json(Spots)
+  res.json({Spots})
 })
 
 module.exports = router;
