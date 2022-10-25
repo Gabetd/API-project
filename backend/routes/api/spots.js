@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const Layer = require('express/lib/router/layer');
+const { where } = require('sequelize');
 const {Spot, User, Review, SpotImage, ReviewImage, sequelize} = require('../../db/models');
 // const spot = require('../../db/models/spot');
 const { requireAuth } = require('../../utils/auth');
@@ -147,23 +149,20 @@ router.post('/', requireAuth, async (req, res) => {
 
 //get all routes
 router.get('/', async (req,res) => {
-  let { page, size } = req.query;
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+    const where = {}
+    if(maxLat){where.lat > maxLat}
+
   if (!page) page = 1;
   if (!size) size = 20;
   if (page > 10) page = 10;
   if (size > 20) size = 20;
 
-  // let upCase = /[A-Z]/g;
-  // let lowCase = /[a-z]/g;
-  // const arr1 = page.match(upCase);
-  // const arr2 = page.match(lowCase);
-  // const arr3 = size.match(upCase);
-  // let arr4 = size.match(lowCase);
 
   if (Number.isInteger(page) && Number.isInteger(size) &&
     page > 0 && size > 0 && page < 11 && size < 21
     ) {page = parseInt(page);size = parseInt(size);}
-    // else if (arr1 || arr2 || arr3 || arr4){
+    // else if (){
     //   res.status(400);
     //   res.json({
     //     "message": "Validation Error",
@@ -179,6 +178,7 @@ router.get('/', async (req,res) => {
   //  "message3": `${arr3.length}, ${arr3}`,
   //  "message4": `${arr4.length}, ${arr4}`,
       const spot = await Spot.findAll({
+        where,
         include: [
           {model: Review, attributes: []},
           {model: SpotImage, attributes: []}],
