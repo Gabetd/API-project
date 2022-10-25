@@ -5,35 +5,9 @@ const { requireAuth } = require('../../utils/auth');
 
 
 
-// async function countReviews(obj, id) {
-//   let avgStarRating = await Spot.findOne({
-//     where: {
-//         id: id
-//     },
-//     include: [
-//         {
-//             model: Review,
-//             attributes: []
-//         }
-//     ],
-//     attributes: [
-//       [
-//           sequelize.fn("COUNT", sequelize.col("Reviews.id")),
-//           "numReviews"
-//       ],
-//         [
-//             sequelize.fn('AVG', sequelize.col('Reviews.stars')),
-//             'avgStarRating'
-//         ]
-//     ]
-// });
-// obj = avgStarRating;
-//   // aggregates.avgStarRating = Review.toJSON().avgStarRating;
-//   return obj
-// }
 
 
-
+//get spot by current user
 router.get('/current', requireAuth, async (req,res) => {
   const { user } = req;
   const spots = await Spot.findAll({
@@ -59,6 +33,10 @@ router.get('/current', requireAuth, async (req,res) => {
 
 });
 
+
+
+
+//get spot by id
 router.get('/:spotId', async (req,res) => {
   const id = req.params.spotId
   // let spot1 = await Spot.findOne({
@@ -99,33 +77,107 @@ res.json(spots)
 });
 
 
+// Delete a Spot
+router.delete('/:spotId', requireAuth, async (req, res) => {
+  const spotId = req.params;
+  const spot = await Spot.findByPk(spotId)
+
+  if (!spot) {
+      res.status(404)
+      res.json({
+        message: "Spot couldn't be found",
+        statusCode: 404
+      })
+  }
+
+  spot.destroy()
+  res.status(200);
+  res.json({
+      message: "Successfully deleted",
+      statusCode: 200
+  })
+})
+
+
+
+
+//create spot
+router.post('/', requireAuth, async (req, res) => {
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  try{
+      const spot = await Spot.create({ ownerId: req.user.id,
+        address,
+        city,
+        state,
+        country,
+        lat: 1,
+        lng: 1,
+        name,
+        description,
+        price })
+      return res.json(spot);
+      }catch(e){
+        res.status(400);
+        const errors = {}
+        if(!address){errors.address = "Street address is required"}
+        if(!city){errors.city = "City is required"}
+        if(!state){errors.state = "State is required"}
+        if(!country){errors.country = "Country is required"}
+        if(!lat){errors.lat = "Latitude is not valid"}
+        if(!lng){errors.lng = "Longitude is not valid"}
+        if(!name){errors.name = "Name must be less than 50 characters"}
+        if(!description){errors.description = "Description is required"}
+        if(!price){errors.price = "Price per day is required"}
+        res.json({
+          message: "Validation Error",
+          statusCode: 400,
+          errors: errors
+        });
+      };
+    });
+
+    // city: ,
+    // state: ,
+    // country: ,
+    // lat: ,
+    // lng: ,
+    // name: ,
+    // description: ,
+    // price:
+
+//get all routes
 router.get('/', async (req,res) => {
   let { page, size } = req.query;
   if (!page) page = 1;
   if (!size) size = 20;
   if (page > 10) page = 10;
   if (size > 20) size = 20;
-  let upCase = /[A-Z]/g;
-  let lowCase = /[a-z]/g;
-  const arr1 = [page.match(upCase), page.match(lowCase)].flat(5)
-  const arr2 = [size.match(upCase), size.match(lowCase)].flat(5)
+
+  // let upCase = /[A-Z]/g;
+  // let lowCase = /[a-z]/g;
+  // const arr1 = page.match(upCase);
+  // const arr2 = page.match(lowCase);
+  // const arr3 = size.match(upCase);
+  // let arr4 = size.match(lowCase);
+
   if (Number.isInteger(page) && Number.isInteger(size) &&
     page > 0 && size > 0 && page < 11 && size < 21
     ) {page = parseInt(page);size = parseInt(size);}
-    // else if (arr1.length > 1 && arr2.length > 1){
+    // else if (arr1 || arr2 || arr3 || arr4){
     //   res.status(400);
     //   res.json({
-    //     // "message": "Validation Error",
-    //     // "statusCode": 400,
-    //     // "errors": {
-    //     //   "page": "Page must be greater than or equal to 1",
-    //     //   "size": "Size must be greater than or equal to 1"
-    //     // }
-    //       "message": `${arr1.length} , ${arr1}`,
-    //      "message2": `${arr2.length}, ${arr2}`,
+    //     "message": "Validation Error",
+    //     "statusCode": 400,
+    //     "errors": {
+    //       "page": "Page must be greater than or equal to 1",
+    //       "size": "Size must be greater than or equal to 1"
+    //     }
     //   })
     // }
-
+  //   "message": `${arr1.length} , ${arr1}`,
+  //  "message2": `${arr2.length}, ${arr2}`,
+  //  "message3": `${arr3.length}, ${arr3}`,
+  //  "message4": `${arr4.length}, ${arr4}`,
       const spot = await Spot.findAll({
         include: [
           {model: Review, attributes: []},
