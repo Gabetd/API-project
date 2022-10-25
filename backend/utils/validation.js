@@ -7,17 +7,32 @@ const handleValidationErrors = (req, _res, next) => {
   const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty()) {
-      _res.status(400);
-      _res.json({
-        "message": "Validation error",
-        "statusCode": 400,
-        "errors": {
-          "credential": "Email or username is required",
-          "password": "Password is required"
-        }
-      })
+    let err = {}
+    validationErrors.array().forEach(error => {
+      const param = error.param;
+      const message = error.message;
+      err[param] = message;
+    })
 
-  }
+    const err2 = Error('Validation error');
+    err2.errors = err;
+    err2.status = 400
+    err2.title = 'bad request';
+    next(err2);
+
+
+
+    // _res.status(400);
+    //   _res.json({
+    //     "message": "Validation error",
+    //     "statusCode": 400,
+    //     "errors": {
+    //       "credential": "Email or username is required",
+    //       "password": "Password is required"
+    //     }
+    //   })
+
+  }   
   next();
 };
 

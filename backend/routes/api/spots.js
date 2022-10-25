@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {Spot, User, Review, SpotImage, ReviewImage, sequelize} = require('../../db/models');
-const spot = require('../../db/models/spot');
+// const spot = require('../../db/models/spot');
 const { requireAuth } = require('../../utils/auth');
 
 
@@ -45,7 +45,8 @@ router.get('/current', requireAuth, async (req,res) => {
       {model: SpotImage, attributes: []}],
 
       attributes: [
-        'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
+        'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat',
+         'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
         [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
         [sequelize.col('SpotImages.url'), 'previewImage']
       ],
@@ -95,24 +96,54 @@ if(spots.id === null || !spots){
 // Object.assign(spot, spot2),
 res.status(200);
 res.json(spots)
-
 });
 
 
 router.get('/', async (req,res) => {
-  const Spots = await Spot.findAll({
-    include: [
-      {model: Review, attributes: []},
-      {model: SpotImage, attributes: []}],
+  let { page, size } = req.query;
+  if (!page) page = 1;
+  if (!size) size = 20;
+  if (page > 10) page = 10;
+  if (size > 20) size = 20;
+  let upCase = /[A-Z]/g;
+  let lowCase = /[a-z]/g;
+  const arr1 = [page.match(upCase), page.match(lowCase)].flat(5)
+  const arr2 = [size.match(upCase), size.match(lowCase)].flat(5)
+  if (Number.isInteger(page) && Number.isInteger(size) &&
+    page > 0 && size > 0 && page < 11 && size < 21
+    ) {page = parseInt(page);size = parseInt(size);}
+    // else if (arr1.length > 1 && arr2.length > 1){
+    //   res.status(400);
+    //   res.json({
+    //     // "message": "Validation Error",
+    //     // "statusCode": 400,
+    //     // "errors": {
+    //     //   "page": "Page must be greater than or equal to 1",
+    //     //   "size": "Size must be greater than or equal to 1"
+    //     // }
+    //       "message": `${arr1.length} , ${arr1}`,
+    //      "message2": `${arr2.length}, ${arr2}`,
+    //   })
+    // }
 
-    attributes: [
-       'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
-      [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
-      [sequelize.col('SpotImages.url'), 'previewImage']],
-  group: ["spot.id"]
-  })
+      const spot = await Spot.findAll({
+        include: [
+          {model: Review, attributes: []},
+          {model: SpotImage, attributes: []}],
+
+      attributes: [
+        'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
+        [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
+        [sequelize.col('SpotImages.url'), 'previewImage']],
+        group: ["spot.id"],
+      })
+      const base = (page * size) - size
+      const base2 = (page * size)
+      const paginated = spot.slice(base, base2)
+      // console.log(base, base2)
+      let result = {Spots: paginated, page, size}
   res.status(200);
-  res.json({Spots})
+  res.json(result)
 })
 
 module.exports = router;

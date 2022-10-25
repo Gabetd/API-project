@@ -55,7 +55,7 @@ router.post(
       })
       return next()
     };
-    let mtobj = {
+    let result = {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -63,11 +63,11 @@ router.post(
       username: user.username,
       token: null
     }
-    mtobj.token = await setTokenCookie(res, user);
+    result.token = await setTokenCookie(res, user);
 
     res.status(200);
 
-    return res.json(mtobj);
+    return res.json(result);
   }
 );
 
