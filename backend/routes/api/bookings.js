@@ -30,6 +30,15 @@ router.get('/current', requireAuth, async (req, res) => {
   const Bookings = []
   for(let i = 0; i < bookings.length; i++){
     const b = bookings[i]
+    const image = await SpotImage.findOne({
+      where: {
+        spotId: b.Spot.id
+      }
+    })
+    let spotImage = "no image available"
+    if(image){
+      spotImage = image.url
+    }
     const Spot = {
       id: b.Spot.id,
       ownerId: b.Spot.ownerId,
@@ -41,7 +50,7 @@ router.get('/current', requireAuth, async (req, res) => {
       lng: b.Spot.lng,
       name: b.Spot.name,
       price: b.Spot.price,
-      previewImage: b.Spot.SpotImages.previewImage
+      previewImage: spotImage
     }
     console.log(Spot.previewImage)
     const obj = {

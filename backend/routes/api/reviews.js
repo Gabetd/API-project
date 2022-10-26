@@ -119,8 +119,48 @@ router.get('/current', requireAuth, async (req, res) => {
     ],
     group: ["review.id"]
   });
+
+  const Reviews = []
+  for(let i = 0; i < allReviews.length; i++){
+      const b = allReviews[i]
+      const image = await SpotImage.findOne({
+        where: {
+          spotId: b.Spot.id
+        }
+      })
+      let spotImage = "no image available"
+      if(image){
+        spotImage = image.url
+      }
+      const Spot = {
+        id: b.Spot.id,
+        ownerId: b.Spot.ownerId,
+        address: b.Spot.address,
+        city: b.Spot.city,
+        state: b.Spot.state,
+        country: b.Spot.country,
+        lat: b.Spot.lat,
+        lng: b.Spot.lng,
+        name: b.Spot.name,
+        price: b.Spot.price,
+        previewImage: spotImage
+      }
+      const obj = {
+        id: b.id,
+        userId: b.userId,
+        spotId: b.spotId,
+        review: b.review,
+        stars: b.stars,
+        createdAt: b.createdAt,
+        updatedAt:b.updatedAt,
+        User: b.User,
+        Spot: Spot,
+        ReviewImages: b.ReviewImages
+      }
+      Reviews.push(obj)
+  }
   res.status(200);
-  res.json({Reviews: allReviews})
+  res.json({Reviews})
 
 })
 
