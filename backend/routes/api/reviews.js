@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const {Spot, User, Review, SpotImage, ReviewImage, Booking, sequelize} = require('../../db/models');
-const { Op } = require('sequelize');
 const { requireAuth } = require('../../utils/auth');
 
 
@@ -71,6 +70,19 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
   const revId = req.params.reviewId
   const { user } = req
   const userReview = await Review.findByPk(revId)
+
+  if (stars > 5 || stars < 1){
+    res.status(400);
+    res.json({
+      "message": "Validation error",
+      "statusCode": 400,
+      "errors": {
+        "review": "Review text is required",
+        "stars": "Stars must be an integer from 1 to 5",
+      }
+    })
+  }
+
 
   if(!userReview){
     res.status(404)
@@ -169,35 +181,33 @@ router.get('/current', requireAuth, async (req, res) => {
 
 
 
-// Delete a Review
+// Delete a Review (not working)
 router.delete('/:reviewId', requireAuth, async (req, res) => {
   const { user } = req;
   const revId = req.params.reviewId;
-  const review = await Review.findByPk(revId)
+  const rev = await Review.findByPk(revId)
+    if (!rev) {
+      res.status(404)
+      res.json({
+        message: "Review couldn't be found",
+        statusCode: 404
+      })
+    }
 
-  if(review.userId !== user.id){
-    res.status(403);
-    res.json({
-      "message": "Forbidden",
-      "statusCode": 403
-    })
-  }
+    if(rev.userId !== user.id){
+      res.status(403);
+      res.json({
+        "message": "Forbidden",
+        "statusCode": 403
+      })
+    };
 
-
-  if (!review) {
-    review.destroy()
+    rev.destroy() 
     res.status(200)
     res.json({
       message: "Successfully deleted",
       statusCode: 200
     })
-  } else {
-    res.status(404)
-    res.json({
-      message: "Review couldn't be found",
-      statusCode: 404
-    })
-  }
 })
 
 

@@ -52,7 +52,7 @@ router.get('/current', requireAuth, async (req, res) => {
       price: b.Spot.price,
       previewImage: spotImage
     }
-    console.log(Spot.previewImage)
+
     const obj = {
       id: b.id,
       spotId: b.spotId,
@@ -120,7 +120,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 
 
 
-//Delete a booking
+//Delete a booking (working)
 router.delete('/:bookingId', requireAuth, async (req, res) => {
   const { user } = req;
   const bookId = req.params.bookingId;

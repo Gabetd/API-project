@@ -12,7 +12,7 @@ const { requireAuth } = require('../../utils/auth');
 //get spot by current user
 router.get('/current', requireAuth, async (req,res) => {
   const { user } = req;
-  const spots = await Spot.findAll({
+  const Spots = await Spot.findAll({
     where: {
       ownerId: user.id
     },
@@ -31,7 +31,7 @@ router.get('/current', requireAuth, async (req,res) => {
 
 
   res.status(200);
-  res.json({spots})
+  res.json({Spots})
 
 });
 
@@ -197,6 +197,17 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
       spotId: req.params.spotId
     }});
 
+    if (stars > 5 || stars < 1) {
+      res.status(400);
+      res.json({
+          "message": "Validation error",
+          "statusCode": 400,
+          "errors": {
+              "stars": "Stars must be an integer from 1 to 5"
+          }
+      })
+  };
+
 if (!spot) {
   res.status(404);
   res.json({
@@ -241,7 +252,6 @@ if (userReview) {
 router.post('/:spotId/images', requireAuth, async (req, res) => {
   const { url, preview }= req.body;
   const spot = await Spot.findByPk(req.params.spotId);
-  console.log('spot from api', spot)
   if (!spot) {
     res.status(404)
     res.json({
@@ -273,23 +283,23 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 // Edit Spot by Id
 router.put('/:spotId', requireAuth, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
-  const { spotId } = req.params.spotId;
+  const spotId = req.params.spotId;
   const { user } = req
   const spot = await Spot.findByPk(spotId)
-
-  if(spot.ownerId !== user.id){
-    res.status(403);
-    res.json({
-      "message": "Forbidden",
-      "statusCode": 403
-    })
-  }
 
   if(!spot){
     res.status(404);
     res.json({
       "message": "Spot couldn't be found",
       "statusCode": 404
+    })
+  }
+
+  if(spot.ownerId !== user.id){
+    res.status(403);
+    res.json({
+      "message": "Forbidden",
+      "statusCode": 403
     })
   }
 
@@ -382,26 +392,27 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
   const spotId = req.params.spotId;
   const { user } = req
   const spot = await Spot.findByPk(spotId)
-    if(spot.ownerId !== user.id){
-      res.status(403);
-      res.json({
-        "message": "Forbidden",
-        "statusCode": 403
-      })
-    }
-
-  if (spot) {
-    await spot.destroy()
-    res.status(200);
+  if (!spot) {
+    res.status(404)
     res.json({
-        message: "Successfully deleted",
-        statusCode: 200
+      message: "Spot couldn't be found",
+      statusCode: 404
     })
   }
-  res.status(404)
+
+    // if(spot.ownerId !== user.id){
+    //   res.status(403);
+    //   res.json({
+    //     "message": "Forbidden",
+    //     "statusCode": 403
+    //   })
+    // }
+
+  spot.destroy()
+  res.status(200);
   res.json({
-    message: "Spot couldn't be found",
-    statusCode: 404
+      message: "Successfully deleted",
+      statusCode: 200
   })
 })
 
