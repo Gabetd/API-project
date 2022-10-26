@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Layer = require('express/lib/router/layer');
+// const Layer = require('express/lib/router/layer');
 // const { where } = require('sequelize');
 const {Spot, User, Review, SpotImage, ReviewImage, Booking, sequelize} = require('../../db/models');
 const { Op } = require('sequelize');
@@ -111,25 +111,6 @@ const spotBooking = await Booking.findOne({
     })
   }
 
-  // for(let i = 0; i < spotBookings.length; i++){
-  //   console.log("i hit the for loop")
-  //   const start = spotBookings[i].startDate
-  //   const end = spotBookings[i].endDate
-  //   console.log(start, end)
-  //   console.log(start <= a <= end, start <= b <= end)
-  //   if(start < a < end || start < b < end){
-  //     res.status(403);
-  //     res.json({
-  //       "message": "Sorry, this spot is already booked for the specified dates",
-  //       "statusCode": 403,
-  //       "errors": {
-  //         "startDate": "Start date conflicts with an existing booking",
-  //         "endDate": "End date conflicts with an existing booking"
-  //       }
-  //     })
-  //   }
-  // }
-
   const booking = await Booking.create({
     startDate: startDate,
     endDate: endDate,
@@ -138,10 +119,6 @@ const spotBooking = await Booking.findOne({
 })
   res.status(200)
   res.json(booking)
-
-
-
-
 })
 
 
@@ -391,24 +368,28 @@ res.json(spots)
 // Delete a Spot
 router.delete('/:spotId', requireAuth, async (req, res) => {
   const spotId = req.params.spotId;
-  const spot = await Spot.findOne({
-    where: {
-      id: spotId
-    }})
-
-  if (!spot) {
-      res.status(404)
+  const { user } = req
+  const spot = await Spot.findByPk(spotId)
+    if(spot.ownerId !== user.id){
+      res.status(403);
       res.json({
-        message: "Spot couldn't be found",
-        statusCode: 404
+        "message": "Forbidden",
+        "statusCode": 403
       })
-  }
+    }
 
-  spot.destroy()
-  res.status(200);
+  if (spot) {
+    await spot.destroy()
+    res.status(200);
+    res.json({
+        message: "Successfully deleted",
+        statusCode: 200
+    })
+  }
+  res.status(404)
   res.json({
-      message: "Successfully deleted",
-      statusCode: 200
+    message: "Spot couldn't be found",
+    statusCode: 404
   })
 })
 
