@@ -57,7 +57,7 @@ router.get('/:spotId/reviews', async (req, res) => {
           {model: ReviewImage, attributes: ["id", "url"]}]
       },
     ],
-    group: ["Spot.id", "SpotImages.id"],
+    group: ["Spot.id"],
   })
   if(!spot){
     res.status(404)
