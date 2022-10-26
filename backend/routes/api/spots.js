@@ -473,8 +473,8 @@ router.post('/', requireAuth, async (req, res) => {
 //get all routes
 router.get('/', async (req,res) => {
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
-    const where = {}
-    if(maxLat){where.lat > maxLat}
+    // const where = {}
+    // if(maxLat){where.lat > maxLat}
   if (!page) page = 1;
   if (!size) size = 20;
   if (page > 10) page = 10;
@@ -494,7 +494,7 @@ router.get('/', async (req,res) => {
       })
     }
       const spot = await Spot.findAll({
-        where,
+        // where,
         include: [
           {model: Review, attributes: []},
           {model: SpotImage, attributes: []}],
