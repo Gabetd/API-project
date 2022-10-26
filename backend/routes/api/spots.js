@@ -371,7 +371,7 @@ router.get('/:spotId', async (req,res) => {
       attibutes: ["id", "firstName", "lastName"]
     },
   ],
-  group: ["Spot.id", "SpotImages.id"],
+  group: ["Spot.id", "SpotImages.id", "Owner.id"],
 })
 if(spots.id === null || !spots){
   res.status(404);

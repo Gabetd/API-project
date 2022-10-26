@@ -90,6 +90,17 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
     })
   }
 
+  if(endDate < startDate){
+    res.status(400);
+    res.json({
+      "message": "Validation error",
+      "statusCode": 400,
+      "errors": {
+        "endDate": "endDate cannot be on or before startDate"
+      }
+    })
+  }
+
   if(booking.userId !== user.id){
     res.status(403);
     res.json({
@@ -131,6 +142,7 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
       message: "Booking couldn't be found",
       statusCode: 404
     })}
+
 
     if(booking.userId !== user.id){
     res.status(403);
