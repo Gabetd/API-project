@@ -100,7 +100,19 @@ const spotBooking = await Booking.findOne({
         endDate: {[Op.between]: [a, b]}}]
   }
 })
-  if(spotBooking){
+if(spotBooking){
+  res.status(403)
+  res.json({
+    "message": "Sorry, this spot is already booked for the specified dates",
+    "statusCode": 403,
+    "errors": {
+      "startDate": "Start date conflicts with an existing booking",
+      "endDate": "End date conflicts with an existing booking"
+    }
+  })
+}
+
+  if(endDate < startDate){
     res.status(400);
     res.json({
       "message": "Validation error",
@@ -451,13 +463,10 @@ router.get('/', async (req,res) => {
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
     const where = {}
     if(maxLat){where.lat > maxLat}
-
   if (!page) page = 1;
   if (!size) size = 20;
   if (page > 10) page = 10;
   if (size > 20) size = 20;
-
-
   if (Number.isInteger(page) && Number.isInteger(size) &&
     page > 0 && size > 0 && page < 11 && size < 21
     ) {page = parseInt(page);size = parseInt(size);}
