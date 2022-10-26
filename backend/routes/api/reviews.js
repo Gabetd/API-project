@@ -120,7 +120,7 @@ router.get('/current', requireAuth, async (req, res) => {
       {model: User, attributes: ["id", "firstName", "lastName"]},
       {model: Spot,
         include: [
-          {model: SpotImage, attributes: [["url","previewImage"]]}
+          {model: SpotImage}
         ],
           attributes: {
             exclude:["createdAt", "updatedAt"]
@@ -129,7 +129,7 @@ router.get('/current', requireAuth, async (req, res) => {
       },
       {model: ReviewImage, attributes: ["id", "url"]}
     ],
-    group: ["review.id"]
+    group: ["Review.id"]
   });
 
   const Reviews = []
@@ -202,7 +202,7 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
       })
     };
 
-    rev.destroy() 
+    rev.destroy()
     res.status(200)
     res.json({
       message: "Successfully deleted",

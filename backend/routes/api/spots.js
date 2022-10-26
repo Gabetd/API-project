@@ -26,7 +26,7 @@ router.get('/current', requireAuth, async (req,res) => {
         [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
         [sequelize.col('SpotImages.url'), 'previewImage']
       ],
-      group: ["spot.id"]
+      group: ["Spot.id"]
     });
 
 
@@ -57,7 +57,7 @@ router.get('/:spotId/reviews', async (req, res) => {
           {model: ReviewImage, attributes: ["id", "url"]}]
       },
     ],
-    group: ["spot.id"]
+    group: ["Spot.id"]
   })
   if(!spot){
     res.status(404)
@@ -371,6 +371,7 @@ router.get('/:spotId', async (req,res) => {
       attibutes: ["id", "firstName", "lastName"]
     },
   ],
+  group: ["Spot.id"],
 })
 if(spots.id === null || !spots){
   res.status(404);
@@ -503,7 +504,7 @@ router.get('/', async (req,res) => {
         'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
         [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
         [sequelize.col('SpotImages.url'), 'previewImage']],
-        group: ["spot.id"],
+        group: ["Spot.id"],
       })
       const base = (page * size) - size
       const base2 = (page * size)
