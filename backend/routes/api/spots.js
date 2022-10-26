@@ -348,10 +348,9 @@ router.put('/:spotId', requireAuth, async (req, res) => {
 //get spot by id
 router.get('/:spotId', async (req,res) => {
   const id = req.params.spotId
-  // let spot1 = await Spot.findOne({
-  //   where:
-  //       {id: id},
-  // });
+//   let spot1 = await Spot.findOne({
+//     where:
+// {id: id}});
 
   let spots = await Spot.findOne({
     where: {
@@ -373,7 +372,7 @@ router.get('/:spotId', async (req,res) => {
   ],
   group: ["Spot.id", "SpotImages.id", "Owner.id"],
 })
-if(spots.id === null || !spots){
+if(!spots){
   res.status(404);
   res.json({
     "message": "Spot couldn't be found",
