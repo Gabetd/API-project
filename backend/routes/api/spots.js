@@ -23,7 +23,7 @@ router.get('/current', requireAuth, async (req,res) => {
       attributes: [
         'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat',
          'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
-        [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
+         [sequelize.fn('ROUND',sequelize.fn('AVG', sequelize.col('Reviews.stars')),2),'avgStarRating'],
         [sequelize.col('SpotImages.url'), 'previewImage']
       ],
       group: ["Spot.id", "SpotImages.id"],
@@ -101,9 +101,21 @@ const spotBooking = await Booking.findOne({
         endDate: {[Op.between]: [a, b]}}]
   }
 })
+
+if(endDate < startDate){
+  res.status(400);
+  res.json({
+    "message": "Validation error",
+    "statusCode": 400,
+    "errors": {
+      "endDate": "endDate cannot be on or before startDate"
+    }
+  })
+}
+
 if(spotBooking){
   res.status(403)
-  res.json({
+  return res.json({
     "message": "Sorry, this spot is already booked for the specified dates",
     "statusCode": 403,
     "errors": {
@@ -111,27 +123,16 @@ if(spotBooking){
       "endDate": "End date conflicts with an existing booking"
     }
   })
-}
-
-  if(endDate < startDate){
-    res.status(400);
-    res.json({
-      "message": "Validation error",
-      "statusCode": 400,
-      "errors": {
-        "endDate": "endDate cannot be on or before startDate"
-      }
-    })
-  }
-
+} else {
   const booking = await Booking.create({
     startDate: startDate,
     endDate: endDate,
     userId: req.user.id,
     spotId: spot.id
-})
+  })
   res.status(200)
   res.json(booking)
+}
 })
 
 
@@ -361,7 +362,7 @@ router.get('/:spotId', async (req,res) => {
     ["country","country"],["lat","lat"],["lng","lng"],["name","name"],["description","description"],
     ["price","price"],["createdAt","createdAt"],["updatedAt","updatedAt"],
     [sequelize.fn("COUNT", sequelize.col("Reviews.id")),"numReviews"],
-    [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgStarRating']],
+    [sequelize.fn('ROUND',sequelize.fn('AVG', sequelize.col('Reviews.stars')),2),'avgStarRating']],
 
     include: [
       {model: Review, attributes: []},
@@ -501,7 +502,7 @@ router.get('/', async (req,res) => {
 
       attributes: [
         'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
-        [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
+        [sequelize.fn('ROUND',sequelize.fn('AVG', sequelize.col('Reviews.stars')),2),'avgStarRating'],
         [sequelize.col('SpotImages.url'), 'previewImage']],
         group: ["Spot.id", "SpotImages.url"],
       })
