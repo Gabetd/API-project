@@ -28,7 +28,8 @@ router.get('/current', requireAuth, async (req,res) => {
       ],
       group: ["Spot.id", "SpotImages.id"],
     });
-
+    const stars = Spots.avgStarRating || "0.00"
+    Spots.avgStarRating = stars;
 
   res.status(200);
   res.json({Spots})
@@ -353,7 +354,7 @@ router.get('/:spotId', async (req,res) => {
 //     where:
 // {id: id}});
 
-  let spots = await Spot.findOne({
+  let Spots = await Spot.findOne({
     where: {
       id: id
     },
@@ -373,14 +374,16 @@ router.get('/:spotId', async (req,res) => {
   ],
   group: ["Spot.id", "SpotImages.id", "Owner.id"],
 })
-if(!spots){
+if(!Spots){
   res.status(404);
   res.json({
     "message": "Spot couldn't be found",
     "statusCode": 404
   })}
+  const stars = Spots.avgStarRating || "0.00"
+  Spots.avgStarRating = stars;
 res.status(200);
-res.json(spots)
+res.json(Spots)
 });
 
 
@@ -471,7 +474,7 @@ router.post('/', requireAuth, async (req, res) => {
 
 
 
-//get all routes
+//get all spots
 router.get('/', async (req,res) => {
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
     // const where = {}
@@ -506,6 +509,8 @@ router.get('/', async (req,res) => {
         [sequelize.col('SpotImages.url'), 'previewImage']],
         group: ["Spot.id", "SpotImages.url"],
       })
+      const stars = spot.avgStarRating || "0.00"
+      spot.avgStarRating = stars;
       const base = (page * size) - size
       const base2 = (page * size)
       const paginated = spot.slice(base, base2)
