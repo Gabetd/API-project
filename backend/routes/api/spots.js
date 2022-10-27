@@ -542,30 +542,32 @@ router.get('/', async (req,res) => {
         [sequelize.col('SpotImages.url'), 'previewImage']],
         group: ["Spot.id", "SpotImages.url"],
       })
-      const result = {}
+      const Spots = []
       for(let i = 0; i < spot.length; i++){
-        const Spots = spot[i]
-          result.id = Spots.id,
-          result.ownerId = Spots.ownerId,
-          result.address = Spots.address,
-          result.city = Spots.city,
-          result.state = Spots.state,
-          result.country = Spots.country,
-          result.lat = Spots.lat,
-          result.lng = Spots.lng,
-          result.name = Spots.name,
-          result.description = Spots.description,
-          result.price = Spots.price,
-          result.createdAt = Spots.createdAt,
-          result.updatedAt = Spots.updatedAt,
-          result.avgStarRating = Spots.avgStarRating || "0.00",
-          result.previewImage = Spots.previewImage
-      }
+        const result = {}
+        const Spots1 = spot[i]
+          result.id = Spots1.id,
+          result.ownerId = Spots1.ownerId,
+          result.address = Spots1.address,
+          result.city = Spots1.city,
+          result.state = Spots1.state,
+          result.country = Spots1.country,
+          result.lat = Spots1.lat,
+          result.lng = Spots1.lng,
+          result.name = Spots1.name,
+          result.description = Spots1.description,
+          result.price = Spots1.price,
+          result.createdAt = Spots1.createdAt,
+          result.updatedAt = Spots1.updatedAt,
+          result.avgStarRating = Spots1.avgStarRating || "0.00",
+          result.previewImage = Spots1.previewImage
+          Spots.push(result)
+        }
 
       const base = (page * size) - size
       const base2 = (page * size)
       const paginated = spot.slice(base, base2)
-      let result1 = {result: paginated, page, size}
+      let result1 = {Spots: paginated, page, size}
   res.status(200);
   res.json(result1)
 })
