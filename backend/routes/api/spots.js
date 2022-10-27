@@ -30,7 +30,7 @@ router.get('/current', requireAuth, async (req,res) => {
     });
     const stars = Spots.avgStarRating || "0.00"
     Spots.avgStarRating = stars;
-
+    await Spots.save()
   res.status(200);
   res.json({Spots})
 
@@ -382,6 +382,7 @@ if(!Spots){
   })}
   const stars = Spots.avgStarRating || "0.00"
   Spots.avgStarRating = stars;
+  await Spots.save()
 res.status(200);
 res.json(Spots)
 });
@@ -511,6 +512,7 @@ router.get('/', async (req,res) => {
       })
       const stars = spot.avgStarRating || "0.00"
       spot.avgStarRating = stars;
+      await spot.save()
       const base = (page * size) - size
       const base2 = (page * size)
       const paginated = spot.slice(base, base2)
