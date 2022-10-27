@@ -31,6 +31,8 @@ router.get('/current', requireAuth, async (req,res) => {
     const result = {}
     for(let i = 0; i < spot.length; i++){
       const Spots = spot[i]
+      let stars = Spots.dataValues.avgStarRating;
+      if(stars === null){stars = "0.00"}
         result.id = Spots.id,
         result.ownerId = Spots.ownerId,
         result.address = Spots.address,
@@ -44,7 +46,7 @@ router.get('/current', requireAuth, async (req,res) => {
         result.price = Spots.price,
         result.createdAt = Spots.createdAt,
         result.updatedAt = Spots.updatedAt,
-        result.avgStarRating = Spots.avgStarRating || "0.00",
+        result.avgStarRating = stars,
         result.previewImage = Spots.previewImage
     }
   res.status(200);
@@ -396,6 +398,8 @@ if(!Spots){
     "message": "Spot couldn't be found",
     "statusCode": 404
   })}
+  let stars = Spots.dataValues.avgStarRating;
+  if(stars === null){stars = "0.00"}
 const result = {
   id: Spots.id,
   ownerId: Spots.ownerId,
@@ -411,7 +415,7 @@ const result = {
   createdAt: Spots.createdAt,
   updatedAt: Spots.updatedAt,
   numReviews: Spots.numReviews,
-  avgStarRating: Spots.avgStarRating || "0.00",
+  avgStarRating: stars,
   SpotImages: Spots.SpotImages,
   Owner: Spots.Owner
 }
@@ -542,10 +546,14 @@ router.get('/', async (req,res) => {
         [sequelize.col('SpotImages.url'), 'previewImage']],
         group: ["Spot.id", "SpotImages.url"],
       })
-      const Spots = []
+      console.log(spot)
+      let Spots = []
       for(let i = 0; i < spot.length; i++){
         const result = {}
         const Spots1 = spot[i]
+        console.log()
+        let stars = Spots1.dataValues.avgStarRating;
+        if(stars === null){stars = "0.00"}
           result.id = Spots1.id,
           result.ownerId = Spots1.ownerId,
           result.address = Spots1.address,
@@ -559,14 +567,14 @@ router.get('/', async (req,res) => {
           result.price = Spots1.price,
           result.createdAt = Spots1.createdAt,
           result.updatedAt = Spots1.updatedAt,
-          result.avgStarRating = Spots1.avgStarRating || "0.00",
+          result.avgStarRating = stars,
           result.previewImage = Spots1.previewImage
           Spots.push(result)
-        }
+      }
 
       const base = (page * size) - size
       const base2 = (page * size)
-      const paginated = spot.slice(base, base2)
+      const paginated = Spots.slice(base, base2)
       let result1 = {Spots: paginated, page, size}
   res.status(200);
   res.json(result1)
