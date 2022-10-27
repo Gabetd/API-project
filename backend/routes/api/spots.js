@@ -391,6 +391,7 @@ router.get('/:spotId', async (req,res) => {
     },
   ],
   group: ["Spot.id", "SpotImages.id", "Owner.id"],
+  order: [Spot, "id"]
 })
 if(!Spots){
   res.status(404);
@@ -545,6 +546,7 @@ router.get('/', async (req,res) => {
         [sequelize.fn('ROUND',sequelize.fn('AVG', sequelize.col('Reviews.stars')),2),'avgStarRating'],
         [sequelize.col('SpotImages.url'), 'previewImage']],
         group: ["Spot.id", "SpotImages.url"],
+        order: [Spot, "id"]
       })
       console.log(spot)
       let Spots = []
