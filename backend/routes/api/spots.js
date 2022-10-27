@@ -47,7 +47,7 @@ router.get('/current', requireAuth, async (req,res) => {
         result.createdAt = Spots.createdAt,
         result.updatedAt = Spots.updatedAt,
         result.avgStarRating = stars,
-        result.previewImage = Spots.previewImage
+        result.previewImage = Spots.dataValues.previewImage
     }
   res.status(200);
   res.json({Spots: result})
@@ -415,7 +415,7 @@ const result = {
   price: Spots.price,
   createdAt: Spots.createdAt,
   updatedAt: Spots.updatedAt,
-  numReviews: Spots.numReviews,
+  numReviews: Spots.dataValues.numReviews,
   avgStarRating: stars,
   SpotImages: Spots.SpotImages,
   Owner: Spots.Owner
@@ -570,7 +570,7 @@ router.get('/', async (req,res) => {
           result.createdAt = Spots1.createdAt,
           result.updatedAt = Spots1.updatedAt,
           result.avgStarRating = stars,
-          result.previewImage = Spots1.previewImage
+          result.previewImage = Spots1.dataValues.previewImage
           Spots.push(result)
       }
 
