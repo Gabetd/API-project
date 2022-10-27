@@ -12,7 +12,7 @@ const { requireAuth } = require('../../utils/auth');
 //get spot by current user
 router.get('/current', requireAuth, async (req,res) => {
   const { user } = req;
-  const Spots = await Spot.findAll({
+  const spot = await Spot.findAll({
     where: {
       ownerId: user.id
     },
@@ -28,11 +28,27 @@ router.get('/current', requireAuth, async (req,res) => {
       ],
       group: ["Spot.id", "SpotImages.id"],
     });
-    const stars = Spots.avgStarRating || "0.00"
-    Spots.avgStarRating = stars;
-    await Spots.save()
+    const result = {}
+    for(let i = 0; i < spot.length; i++){
+      const Spots = spot[i]
+        result.id = Spots.id,
+        result.ownerId = Spots.ownerId,
+        result.address = Spots.address,
+        result.city = Spots.city,
+        result.state = Spots.state,
+        result.country = Spots.country,
+        result.lat = Spots.lat,
+        result.lng = Spots.lng,
+        result.name = Spots.name,
+        result.description = Spots.description,
+        result.price = Spots.price,
+        result.createdAt = Spots.createdAt,
+        result.updatedAt = Spots.updatedAt,
+        result.avgStarRating = Spots.avgStarRating || "0.00",
+        result.previewImage = Spots.previewImage
+    }
   res.status(200);
-  res.json({Spots})
+  res.json({Spots: result})
 
 });
 
@@ -316,7 +332,7 @@ router.put('/:spotId', requireAuth, async (req, res) => {
     spot.name = name;
     spot.description = description;
     spot.price = price;
-    await spot.save()
+
 
     res.status(200);
     res.json(spot)
@@ -380,11 +396,27 @@ if(!Spots){
     "message": "Spot couldn't be found",
     "statusCode": 404
   })}
-  const stars = Spots.avgStarRating || "0.00"
-  Spots.avgStarRating = stars;
-  await Spots.save()
+const result = {
+  id: Spots.id,
+  ownerId: Spots.ownerId,
+  address: Spots.address,
+  city: Spots.city,
+  state: Spots.state,
+  country: Spots.country,
+  lat: Spots.lat,
+  lng: Spots.lng,
+  name: Spots.name,
+  description: Spots.description,
+  price: Spots.price,
+  createdAt: Spots.createdAt,
+  updatedAt: Spots.updatedAt,
+  numReviews: Spots.numReviews,
+  avgStarRating: Spots.avgStarRating || "0.00",
+  SpotImages: Spots.SpotImages,
+  Owner: Spots.Owner
+}
 res.status(200);
-res.json(Spots)
+res.json(result)
 });
 
 
@@ -510,15 +542,32 @@ router.get('/', async (req,res) => {
         [sequelize.col('SpotImages.url'), 'previewImage']],
         group: ["Spot.id", "SpotImages.url"],
       })
-      const stars = spot.avgStarRating || "0.00"
-      spot.avgStarRating = stars;
-      await spot.save()
+      const result = {}
+      for(let i = 0; i < spot.length; i++){
+        const Spots = spot[i]
+          result.id = Spots.id,
+          result.ownerId = Spots.ownerId,
+          result.address = Spots.address,
+          result.city = Spots.city,
+          result.state = Spots.state,
+          result.country = Spots.country,
+          result.lat = Spots.lat,
+          result.lng = Spots.lng,
+          result.name = Spots.name,
+          result.description = Spots.description,
+          result.price = Spots.price,
+          result.createdAt = Spots.createdAt,
+          result.updatedAt = Spots.updatedAt,
+          result.avgStarRating = Spots.avgStarRating || "0.00",
+          result.previewImage = Spots.previewImage
+      }
+
       const base = (page * size) - size
       const base2 = (page * size)
       const paginated = spot.slice(base, base2)
-      let result = {Spots: paginated, page, size}
+      let result1 = {result: paginated, page, size}
   res.status(200);
-  res.json(result)
+  res.json(result1)
 })
 
 module.exports = router;
