@@ -18,7 +18,11 @@ router.get('/current', requireAuth, async (req,res) => {
     },
     include: [
       {model: Review, attributes: []},
-      {model: SpotImage, attributes: []}],
+      {model: SpotImage,
+        where: {
+          preview: true
+        },
+        attributes: []}],
 
       attributes: [
         'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat',
@@ -539,7 +543,11 @@ router.get('/', async (req,res) => {
         // where,
         include: [
           {model: Review, attributes: []},
-          {model: SpotImage, attributes: []}],
+          {model: SpotImage,
+            where: {
+              preview: true
+            },
+            attributes: []}],
 
       attributes: [
         'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'description', 'price', 'createdAt', 'updatedAt',
