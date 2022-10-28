@@ -56,7 +56,7 @@ router.get('/current', requireAuth, async (req, res) => {
     const obj = {
       id: b.id,
       spotId: b.spotId,
-      spot: Spot,
+      Spot: Spot,
       userId: b.userId,
       startDate: b.startDate,
       endDate: b.endDate,
