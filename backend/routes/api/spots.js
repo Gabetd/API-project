@@ -28,11 +28,11 @@ router.get('/current', requireAuth, async (req,res) => {
       ],
       group: ["Spot.id", "SpotImages.id"],
     });
-    let Spots = []
+    const Spots = []
     for(let i = 0; i < spot.length; i++){
       const result = {}
       const spots = spot[i]
-      let stars = Spots.dataValues.avgStarRating;
+      let stars = spots.dataValues.avgStarRating;
       if(stars === null){stars = "0.00"}
         result.id = spots.id,
         result.ownerId = spots.ownerId,
