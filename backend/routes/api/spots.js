@@ -28,29 +28,31 @@ router.get('/current', requireAuth, async (req,res) => {
       ],
       group: ["Spot.id", "SpotImages.id"],
     });
-    const result = {}
+    let Spots = []
     for(let i = 0; i < spot.length; i++){
-      const Spots = spot[i]
+      const result = {}
+      const spots = spot[i]
       let stars = Spots.dataValues.avgStarRating;
       if(stars === null){stars = "0.00"}
-        result.id = Spots.id,
-        result.ownerId = Spots.ownerId,
-        result.address = Spots.address,
-        result.city = Spots.city,
-        result.state = Spots.state,
-        result.country = Spots.country,
-        result.lat = Spots.lat,
-        result.lng = Spots.lng,
-        result.name = Spots.name,
-        result.description = Spots.description,
-        result.price = Spots.price,
-        result.createdAt = Spots.createdAt,
-        result.updatedAt = Spots.updatedAt,
+        result.id = spots.id,
+        result.ownerId = spots.ownerId,
+        result.address = spots.address,
+        result.city = spots.city,
+        result.state = spots.state,
+        result.country = spots.country,
+        result.lat = spots.lat,
+        result.lng = spots.lng,
+        result.name = spots.name,
+        result.description = spots.description,
+        result.price = spots.price,
+        result.createdAt = spots.createdAt,
+        result.updatedAt = spots.updatedAt,
         result.avgStarRating = stars,
-        result.previewImage = Spots.dataValues.previewImage
+        result.previewImage = spots.dataValues.previewImage
+        Spots.push(result)
     }
   res.status(200);
-  res.json({Spots: result})
+  res.json({Spots})
 
 });
 
