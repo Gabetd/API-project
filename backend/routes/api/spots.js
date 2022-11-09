@@ -550,7 +550,6 @@ router.get('/', async (req,res) => {
         group: ["Spot.id", "SpotImages.url"],
         order: ["id"]
       })
-      console.log(spot)
       let Spots = []
       for(let i = 0; i < spot.length; i++){
         const result = {}
