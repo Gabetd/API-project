@@ -9,8 +9,7 @@ const index = require('../backend/config/index')
 const environ = index.environment
 const { environment } = require('./config');
 const isProduction = environment === 'production';
-console.log(environ)
-// console.log(isProduction)
+
 
 const app = express();
 

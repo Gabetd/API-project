@@ -5,7 +5,6 @@ const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 
 const setUser = (user) => {
-  console.log(user)
   return {
     type: SET_USER,
     payload: user,
@@ -28,7 +27,6 @@ export const login = (user) => async (dispatch) => {
     }),
   });
   const data = await response.json();
-  console.log(data)
   dispatch(setUser(data));
   return response;
 };

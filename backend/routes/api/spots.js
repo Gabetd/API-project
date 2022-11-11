@@ -554,7 +554,6 @@ router.get('/', async (req,res) => {
       for(let i = 0; i < spot.length; i++){
         const result = {}
         const Spots1 = spot[i]
-        console.log()
         let stars = Spots1.dataValues.avgStarRating;
         if(stars === null){stars = "0.00"}
           result.id = Spots1.id,
