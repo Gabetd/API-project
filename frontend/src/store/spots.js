@@ -35,10 +35,13 @@ return {
 
 //THUNK
 export const getAllSpotsThunk = () => async (dispatch) => {
-  const response = await csrfFetch('/api/spots/');
-  const data = await response.json();
-  dispatch(getAllSpots(data));
-  return response
+  const response = await csrfFetch('/api/spots');
+
+  if (response.ok){
+    const data = await response.json();
+    dispatch(getAllSpots(data));
+    return response
+  }
 }
 
 export const createSpotThunk = (spot) => async (dispatch) => {
@@ -72,14 +75,24 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
   return response;
 }
 
+const initialState = {
+  list: {},
+}
+
 
 //REDUCER
 const spotsReducer = (state = initialState, action) => {
   let newState;
+  let list;
   switch (action.type) {
     case GET_ALL_SPOTS:
+      // newState = {...state}
+      // action.data.Spots.forEach(spot => {
+      //   list[spot.id] = spot
+      // });
+      // newState.list = list
+      return newState
 
-      return
     case CREATE_SPOT:
 
       return
