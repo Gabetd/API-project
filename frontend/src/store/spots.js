@@ -130,12 +130,12 @@ const spotReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case GET_SPOTS:
-      let newAllSpots = {}
+      let newSpots = {}
       newState = { ...state, allSpots: {...state.allSpots} }
       action.spots.Spots.forEach(spot => {
-        newAllSpots[spot.id] = spot
+        newSpots[spot.id] = spot
       })
-      newState.allSpots = newAllSpots
+      newState.allSpots = newSpots
       return newState
 
 
@@ -153,10 +153,6 @@ const spotReducer = (state = initialState, action) => {
       newState.singleSpot = { ...action.spot }
       return newState
 
-    // case EDIT_SPOT:
-    //   newState = { ...state, singleSpot: {...state.singleSpot}, allSpots: {...state.allSpots}}
-
-    // return
 
     case RESET_SPOT:
       return initialState
@@ -171,13 +167,5 @@ const spotReducer = (state = initialState, action) => {
       return state
   }
 }
-
-// function normalize(data) {
-//   const obj = {}
-//   data.spots.forEach(ele => {
-//     obj[ele.id] = ele
-//   })
-//   return obj
-// }
 
 export default spotReducer

@@ -7,7 +7,6 @@ import './Home.css'
 const Home = () => {
   const spots = useSelector(state => state.spot.allSpots)
 
-
   const dispatch = useDispatch()
 
   useEffect(() => {
