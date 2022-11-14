@@ -1,50 +1,58 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch  } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { getAllSpotsThunk } from '../../store/spots';
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { NavLink } from 'react-router-dom'
+import { spotGet } from "../../store/spots"
+import './Home.css'
+
+const Home = () => {
+  const spots = useSelector(state => state.spot.allSpots)
 
 
-
-
-function Home(){
-  const dispatch = useDispatch();
-
-  const spots = useSelector(state => {
-    return state.spots.list
-  })
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getAllSpotsThunk())
+    dispatch(spotGet())
   }, [dispatch])
 
 
-  return (
-    <div className="centered-form-standard">
-        {spots.map(spot => {
-            <div className='spot-prev'>
-              <nav>
-              <NavLink className="navEdit" to={`/Spots/${spot.id}`}>
-                <div >
-                 <img className="imgDiv" src={`${spot.previewImage}`} alt={spot.name}></img>
-                 </div>
-                   <div className="namePrice">
-                      <h4>{spot.name}</h4>
-                      <h4>
-                          <i className="fa fa-star" aria-hidden="true"></i>
-                          {spot.avgRating}
-                      </h4>
-                   </div>
-                      <p>{spot.city}, {spot.state}</p>
-                        <h4>${spot.price} night</h4>
-
-              </NavLink>
-              </nav>
-
-            </div>
-        })}
-    </div>
-  )
-
+  if (!spots) {
+    return null
+  } else {
+    return (
+      <div className="housing">
+        <div className="outer-level">
+          {Object.values(spots).map(spot => (
+            <div key={spot.id} className='card-holder'>
+            <NavLink to={`/spots/${spot.id}`} >
+              <div>
+                <div>
+                  <img className="card" src={spot.previewImage}/>
+                  <div>
+                    {spot.city}, {spot.state}, {spot.country}
+                  </div>
+                  <div>
+                  ★{spot.avgStarRating}
+                  </div>
+                </div>
+                <div>
+                  {spot.name}
+                </div>
+                <div>
+                  {spot.address}
+                </div>
+                <div>
+                  <div>
+                    $ {spot.price} per night
+                  </div>
+                </div>
+              </div>
+            </NavLink>
+          </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
 }
 
 export default Home;

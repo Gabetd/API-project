@@ -10,7 +10,7 @@ import Home from "./components/Home"
 
 function App() {
   const dispatch = useDispatch();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
@@ -20,9 +20,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          {/* <Route exact path="/">
+          <Route exact path="/">
             <Home />
-          </Route> */}
+          </Route>
           <Route path="/signup">
             <SignupForm />
           </Route>

@@ -1,0 +1,20 @@
+.card {
+  width: 50%;
+  height: 50%;
+  background-color: aqua;
+}
+.card-holder{
+  width: 33%;
+  height: 30%;
+  background-color: bisque;
+}
+.outer-level {
+  width: 75%;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: brown;
+}
+.housing {
+  justify-content: center;
+  align-items: center;
+}
