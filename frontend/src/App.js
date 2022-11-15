@@ -7,6 +7,7 @@ import LoginForm from "./components/LoginFormModal";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import Home from "./components/Home"
+import SpotById from "./components/spotById"
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +29,9 @@ function App() {
           </Route>
           <Route path="/login">
             <LoginForm />
+          </Route>
+          <Route path='/spots/:spotId'>
+            <SpotById />
           </Route>
         </Switch>
       )}

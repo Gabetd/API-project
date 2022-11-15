@@ -1,6 +1,5 @@
 import { csrfFetch } from './csrf';
 
-
 const GET_SPOTS = 'spots/getSpots'
 const ONE_SPOT = 'spot/oneSpot'
 const CREATE_SPOT = 'spots/createSpot'
@@ -44,7 +43,7 @@ export const resetSpot = () => {
 }
 
 //---Thunk---//
-export const spotGet = () => async dispatch => {
+export const getAllSpots = () => async dispatch => {
   const response = await fetch(`/api/spots`);
   if (response.ok) {
     const spots = await response.json();
@@ -68,7 +67,6 @@ export const currOwnerSpots = () => async dispatch => {
   const response = await csrfFetch(`/api/spots/current`);
   if (response.ok) {
     const spots = await response.json();
-    // console.log('currentOwnerSpots from Thunk ------> ', spots)
     await dispatch(getSpots(spots))
     return spots
   }
@@ -95,7 +93,6 @@ export const spotEdit = (spot) => async dispatch => {
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify(spot)
   })
-  // console.log('spot from spotedit', spot)
   if(response.ok) {
     const spot = await response.json()
     await dispatch(addSpot(spot))
@@ -109,19 +106,15 @@ export const spotRemove = (spotId) => async dispatch => {
     method: 'DELETE'
   })
   if (response.ok) {
-    // const removedSpot = await response.json()
-    // console.log('removed Spot from thunk', removedSpot)
     dispatch(removeSpot(spotId))
   }
   return null
 }
 
-//--------------//
 const initialState = {
   allSpots: {},
   oneSpot: {}
 }
-//--------------//
 
 
 //---Reducer---//
@@ -137,32 +130,22 @@ const spotReducer = (state = initialState, action) => {
       })
       newState.allSpots = newSpots
       return newState
-
-
-
     case CREATE_SPOT:
       newState = { ...state }
       newState.allSpots = {...state.allSpots}
       newState.allSpots[action.spot.id] = action.spot
       newState.oneSpot = action.spot
       return newState
-
     case ONE_SPOT:
       newState = { ...state, singleSpot: {...state.oneSpot}} // change to state maybe
-
       newState.singleSpot = { ...action.spot }
       return newState
-
-
     case RESET_SPOT:
       return initialState
-
     case REMOVE_SPOT:
       newState = { ...state, allSpots: {...state.allSpots}}
-
       delete newState.allSpots[action.spotId]
       return newState;
-
     default:
       return state
   }

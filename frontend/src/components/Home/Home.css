@@ -1,20 +1,31 @@
 .card {
-  width: 50%;
+  justify-content: center;
+  width: 60%;
   height: 50%;
   background-color: aqua;
 }
 .card-holder{
-  width: 33%;
-  height: 30%;
+  display: flex;
+  justify-content: center;
+  margin: 1%;
+  width: 30%;
+  height: 20%;
+  /* background-color: rgb(235, 235, 235); */
   background-color: bisque;
 }
 .outer-level {
   width: 75%;
+  margin-right: 12.5%;
+  margin-left: 12.5%;
   display: flex;
   flex-wrap: wrap;
-  background-color: brown;
+  background-color: rgb(235, 235, 235);
+  justify-content: center;
+
+  border-radius: 5%;
 }
 .housing {
   justify-content: center;
   align-items: center;
+  background-color: black;
 }

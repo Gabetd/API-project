@@ -1,21 +1,23 @@
 // frontend/src/components/Navigation/index.js
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
+import { Modal } from '../../context/Modal'
 import SignupFormModal from '../SignupFormModal';
 import SignupForm from '../SignupFormModal/SignupForm';
+import LoginForm from '../LoginFormModal/LoginForm';
 
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
+const [showModal, setShowModal] = useState(false);
+const [login, setLogin] = useState(true);
 
-  let sessionLinks;
+let sessionLinks;
   if (sessionUser) {
-    sessionLinks = (
-      <ProfileButton user={sessionUser} />
-    );
+    sessionLinks = <ProfileButton user={sessionUser} />
   } else {
     sessionLinks = (
       <>
@@ -29,8 +31,20 @@ function Navigation({ isLoaded }){
     <ul>
       <li>
         <NavLink exact to="/">Home</NavLink>
-        {isLoaded && sessionLinks}
+        {isLoaded && (
+          <ProfileButton
+          user={sessionUser}
+          setLogin={setLogin}
+          setShowModal={setShowModal}
+          />
+        )}
       </li>
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          {login ? <LoginForm  setShowModal={setShowModal}/> :
+          <SignupForm setShowModal={setShowModal}/>}
+        </Modal>
+      )}
     </ul>
   );
 }
