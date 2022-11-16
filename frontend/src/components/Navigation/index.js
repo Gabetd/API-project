@@ -9,13 +9,18 @@ import { Modal } from '../../context/Modal'
 import SignupFormModal from '../SignupFormModal';
 import SignupForm from '../SignupFormModal/SignupForm';
 import LoginForm from '../LoginFormModal/LoginForm';
+import CreateSpotModal from "../CreateSpot/index"
+import CreateSpot from '../CreateSpot/CreateSpot';
+import logo from '../logo/logo.png'
 
-function Navigation({ isLoaded }){
+function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
-const [showModal, setShowModal] = useState(false);
-const [login, setLogin] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [login, setLogin] = useState(true);
+  const [createModal, setCreateModal] = useState(false)
 
-let sessionLinks;
+
+  let sessionLinks;
   if (sessionUser) {
     sessionLinks = <ProfileButton user={sessionUser} />
   } else {
@@ -28,24 +33,35 @@ let sessionLinks;
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink exact to="/">Home</NavLink>
-        {isLoaded && (
-          <ProfileButton
-          user={sessionUser}
-          setLogin={setLogin}
-          setShowModal={setShowModal}
-          />
+    <div>
+      <img id='logo' src={logo}></img>
+      <ul>
+        <li>
+          <NavLink exact to="/">Home</NavLink>
+          {isLoaded && (
+            <ProfileButton
+              user={sessionUser}
+              setLogin={setLogin}
+              setShowModal={setShowModal}
+            />
+          )}
+        </li>
+        {showModal && (
+          <Modal onClose={() => setShowModal(false)}>
+            {login ? <LoginForm setShowModal={setShowModal} /> :
+              <SignupForm setShowModal={setShowModal} />}
+          </Modal>
         )}
-      </li>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          {login ? <LoginForm  setShowModal={setShowModal}/> :
-          <SignupForm setShowModal={setShowModal}/>}
-        </Modal>
-      )}
-    </ul>
+        <li>
+          <button onClick={() => setCreateModal(true)}>Become a Host</button>
+          {createModal && (
+            <Modal onClose={() => setCreateModal(false)}>
+              <CreateSpot setCreateModale={setCreateModal} />
+            </Modal>
+          )}
+        </li>
+      </ul>
+    </div>
   );
 }
 

@@ -8,6 +8,8 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import Home from "./components/Home"
 import SpotById from "./components/spotById"
+import CreateSpot from "./components/CreateSpot/CreateSpot";
+import CreateSpotModal from "./components/CreateSpot";
 
 function App() {
   const dispatch = useDispatch();

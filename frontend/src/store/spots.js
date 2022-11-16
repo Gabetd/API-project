@@ -53,8 +53,8 @@ export const getAllSpots = () => async dispatch => {
   return null
 }
 
-export const spotOne = (spot) => async dispatch => {
-  const response = await fetch(`/api/spots/${spot}`);
+export const singleSpot = (spotId) => async dispatch => {
+  const response = await fetch(`/api/spots/${spotId}`);
   if (response.ok) {
     const spot = await response.json()
     await dispatch(oneSpot(spot))
@@ -73,7 +73,7 @@ export const currOwnerSpots = () => async dispatch => {
   return null
 }
 
-export const spotAdd = (spot) => async dispatch => {
+export const addASpot = (spot) => async dispatch => {
   const response = await csrfFetch(`/api/spots`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -81,13 +81,13 @@ export const spotAdd = (spot) => async dispatch => {
   })
   if (response.ok) {
     const spot = await response.json()
-    await dispatch(spotOne(spot.id))
+    await dispatch(singleSpot(spot.id))
     return spot
   }
   return null
 }
 
-export const spotEdit = (spot) => async dispatch => {
+export const editASpot = (spot) => async dispatch => {
   const response = await csrfFetch(`/api/spots/${spot.id}`, {
     method: 'PUT',
     headers: {'Content-Type':'application/json'},
@@ -101,7 +101,7 @@ export const spotEdit = (spot) => async dispatch => {
   return null
 }
 
-export const spotRemove = (spotId) => async dispatch => {
+export const removeASpot = (spotId) => async dispatch => {
   const response = await csrfFetch(`/api/spots/${spotId}`, {
     method: 'DELETE'
   })
@@ -137,8 +137,8 @@ const spotReducer = (state = initialState, action) => {
       newState.oneSpot = action.spot
       return newState
     case ONE_SPOT:
-      newState = { ...state, singleSpot: {...state.oneSpot}} // change to state maybe
-      newState.singleSpot = { ...action.spot }
+      newState = { ...state, oneSpot: {...state.oneSpot}} // change to state maybe
+      newState.oneSpot = { ...action.spot }
       return newState
     case RESET_SPOT:
       return initialState
