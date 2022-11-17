@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom'
-import { addASpot } from "../../store/spots";
+import { addASpot, addSpotImage } from "../../store/spots";
 
 
 
@@ -19,6 +19,7 @@ function CreateSpot({ setCreateModal }) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState(0)
+  const [url, setUrl] = useState('')
   const [validationErrors, setValidationErrors] = useState([]);
 
 
@@ -34,7 +35,6 @@ function CreateSpot({ setCreateModal }) {
       name, description,
       price
     }
-
     const newSpot = await dispatch(addASpot(payload)).catch(
       async (res) => {
         const data = await res.json();
@@ -42,13 +42,14 @@ function CreateSpot({ setCreateModal }) {
           setValidationErrors(data.errors)
         }
       });
+
     history.push(`/Spots/${newSpot.id}`)
   }
 
 
   return (
     <div>
-      <form onSubmit={onsubmit}>
+      <form className='base-form' onSubmit={onsubmit}>
         <div>
           <ul>
             {validationErrors.map((error, idx) => (

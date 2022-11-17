@@ -34,10 +34,11 @@ function Navigation({ isLoaded }) {
 
   return (
     <div id='topBar'>
-      <img id='logo' src={logo}></img>
       <ul>
         <li>
-          <NavLink exact to="/">Home</NavLink>
+          <NavLink exact to="/">
+          <img id='logo' src={logo}></img>
+          </NavLink>
           {isLoaded && (
             <ProfileButton
             user={sessionUser}

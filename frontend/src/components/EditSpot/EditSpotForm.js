@@ -33,7 +33,8 @@ function EditSpot({ setCreateModal }) {
     lat: 1,
     lng: 1,
     name, description,
-    price, image
+    price,
+    // image
   }
 
 
@@ -46,7 +47,8 @@ function EditSpot({ setCreateModal }) {
       lat: 1,
       lng: 1,
       name, description,
-      price
+      price,
+      // image
     }
     console.log(payload)
     const editSpot = await dispatch(editASpot(payload)).catch(
@@ -62,7 +64,7 @@ function EditSpot({ setCreateModal }) {
 
   return (
     <div>
-      <form onSubmit={onsubmit}>
+      <form className='base-form' onSubmit={onsubmit}>
         <div>
           <ul>
             {validationErrors.map((error, idx) => (

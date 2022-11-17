@@ -81,8 +81,8 @@ export const addASpot = (spot) => async dispatch => {
   })
   if (response.ok) {
     const spot = await response.json()
-    await dispatch(singleSpot(spot.id))
-    return spot
+        await dispatch(singleSpot(spot.id))
+        return spot
   }
   return null
 }
@@ -109,6 +109,20 @@ export const removeASpot = (spotId) => async dispatch => {
     dispatch(removeSpot(spotId))
   }
   return null
+}
+
+export const addSpotImage = ({ url, id }) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${id}/images`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+          url,
+          preview: true
+      })
+  })
+  if (response.ok) {
+      dispatch(singleSpot(id))
+  }
 }
 
 const initialState = {

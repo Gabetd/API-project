@@ -1,4 +1,27 @@
 .spot-details {
-  width: 40px;
-  height: 40px;
+  width: 25%;
+  height: 25%;
+}
+
+.side-pic {
+  height: 16%;
+  width: 16%;
+}
+
+.outer{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: antiquewhite;
+  justify-content: center;
+}
+
+.holder {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  height: 70%;
+  justify-content: flex-start;
+  align-items: center;
+
 }
