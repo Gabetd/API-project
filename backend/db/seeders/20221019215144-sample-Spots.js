@@ -27,7 +27,7 @@ module.exports = {
         price: 500
       },
       {
-        ownerId: 2,
+        ownerId: 1,
         address: '72 Meadowbrook Dr',
         city: 'San Francisco',
         state: 'California',
@@ -39,7 +39,7 @@ module.exports = {
         price: 300
       },
       {
-        ownerId: 3,
+        ownerId: 1,
         address: '80 El Verano Way',
         city: 'San Francisco',
         state: 'California',
@@ -87,7 +87,7 @@ module.exports = {
         price: 125
       },
       {
-        ownerId: 7,
+        ownerId: 4,
         address: '1685 Dolores St',
         city: 'San Francisco',
         state: 'California',
@@ -99,7 +99,7 @@ module.exports = {
         price: 620
       },
       {
-        ownerId: 8,
+        ownerId: 4,
         address: '2085 Ocean Ave',
         city: 'San Francisco',
         state: 'California',
@@ -111,7 +111,7 @@ module.exports = {
         price: 167
       },
       {
-        ownerId: 9,
+        ownerId: 4,
         address: '65 Keystone Way',
         city: 'San Francisco',
         state: 'California',
@@ -123,7 +123,7 @@ module.exports = {
         price: 340
       },
       {
-        ownerId: 10,
+        ownerId: 4,
         address: '527 Oak Park Dr',
         city: 'San Francisco',
         state: 'California',

@@ -9,9 +9,9 @@ import { Modal } from '../../context/Modal'
 import SignupFormModal from '../SignupFormModal';
 import SignupForm from '../SignupFormModal/SignupForm';
 import LoginForm from '../LoginFormModal/LoginForm';
-import CreateSpotModal from "../CreateSpot/index"
 import CreateSpot from '../CreateSpot/CreateSpot';
 import logo from '../logo/logo.png'
+
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
@@ -33,18 +33,18 @@ function Navigation({ isLoaded }) {
   }
 
   return (
-    <div>
+    <div id='topBar'>
       <img id='logo' src={logo}></img>
       <ul>
         <li>
           <NavLink exact to="/">Home</NavLink>
           {isLoaded && (
             <ProfileButton
-              user={sessionUser}
-              setLogin={setLogin}
-              setShowModal={setShowModal}
+            user={sessionUser}
+            setLogin={setLogin}
+            setShowModal={setShowModal}
             />
-          )}
+            )}
         </li>
         {showModal && (
           <Modal onClose={() => setShowModal(false)}>
@@ -52,16 +52,14 @@ function Navigation({ isLoaded }) {
               <SignupForm setShowModal={setShowModal} />}
           </Modal>
         )}
-        <li>
           <button onClick={() => setCreateModal(true)}>Become a Host</button>
           {createModal && (
             <Modal onClose={() => setCreateModal(false)}>
               <CreateSpot setCreateModale={setCreateModal} />
             </Modal>
           )}
-        </li>
       </ul>
-    </div>
+      </div>
   );
 }
 

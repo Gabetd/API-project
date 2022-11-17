@@ -19,7 +19,6 @@ function CreateSpot({ setCreateModal }) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
   const [validationErrors, setValidationErrors] = useState([]);
 
 
@@ -33,7 +32,7 @@ function CreateSpot({ setCreateModal }) {
       lat: 1,
       lng: 1,
       name, description,
-      price, image
+      price
     }
 
     const newSpot = await dispatch(addASpot(payload)).catch(
@@ -112,7 +111,7 @@ function CreateSpot({ setCreateModal }) {
             min={1}
           />
         </label>
-        <label>
+        {/* <label>
           Image Url
           <input
             type="text"
@@ -120,7 +119,7 @@ function CreateSpot({ setCreateModal }) {
             onChange={(e) => setImage(e.target.value)}
             required
           />
-        </label>
+        </label> */}
         <button type="submit">Create Spot</button>
       </form>
     </div>

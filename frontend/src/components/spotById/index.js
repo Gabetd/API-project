@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams, useHistory } from 'react-router-dom'
 import { singleSpot } from "../../store/spots"
 import { Modal } from '../../context/Modal'
-import { editASpot, removeASpot } from "../../store/spots"
+import { removeASpot } from "../../store/spots"
+import EditSpot from "../EditSpot/EditSpotForm"
 import './spotDetails.css'
 
 const SpotById = () => {
   const user = useSelector(state => state.session.user)
-  const [showForm, setShowForm] = useState(false)
-  const [errors, setErrors] = useState([])
   const [createModal, setCreateModal] = useState(false)
+  const [errors, setErrors] = useState([])
   const { spotId } = useParams()
   const spot = useSelector(state => state.spot.oneSpot)
   const dispatch = useDispatch()
@@ -18,9 +18,6 @@ const SpotById = () => {
   if(user) spotOwner= (spot.ownerId===user.id)
   const history = useHistory()
 
-  const editSpot = () => {
-
-  }
 
   const DeleteSpot = async (e) => {
     e.preventDefault()
@@ -52,17 +49,17 @@ const SpotById = () => {
       {spot.id}
     </div>
     <img className="spot-details" src={spot.SpotImages[0].url}/>
-    <button onClick={setCreateModal(true)}
+    <button onClick={()=> {setCreateModal(true)}}
       hidden={spotOwner ? false : true}
     >Edit Spot</button>
-  {createModal && (
-    <Modal onClose={()=> setCreateModal(false)}>
-      <EditSpot setCreateModal={true} />
-    </Modal>)}
+             {spotOwner && (createModal && (
+          <Modal onClose={() => setCreateModal(false)}>
+            <EditSpot setCreateModal={setCreateModal} />
+          </Modal>
+          ))}
     <button onClick={DeleteSpot}
       hidden={spotOwner ? false : true}
     >Delete Spot</button>
-
     </div>
       </div>
   )
