@@ -15,6 +15,7 @@ const SpotById = () => {
   const user = useSelector(state => state.session.user)
   const [createModal, setCreateModal] = useState(false)
   const [createReview, setCreateReview] = useState(false)
+  const [render, setRender] = useState(false)
 
   const [errors, setErrors] = useState([])
   const { spotId } = useParams()
@@ -28,8 +29,8 @@ const SpotById = () => {
   let spotOwner;
   if(user) spotOwner= (spot.ownerId===user.id)
   const history = useHistory()
-  console.log(spotReviewed)
-  console.log("users review = ", userReview)
+  // console.log(spotReviewed)
+  // console.log("users review = ", userReview)
 
   useEffect(() => {
     dispatch(getAllSpotReviews(spotId))
@@ -43,8 +44,11 @@ const SpotById = () => {
         if (data && data.errors) setErrors(data.errors)
       }
       )
-      if (attempt) history.push('/')
-      else console.log("failed to delete spot")
+      if (attempt) {history.push('/')
+      setRender(!render)
+    }
+    // else console.log("failed to delete spot")
+
   }
 let review = "review"
 if (spot.numReviews > 1){
@@ -53,8 +57,11 @@ review = "review"
 
 const DeleteReview = async (e) => {
   e.preventDefault()
-  const atempt = dispatch(deleteAReview(parseInt(userReview.id)))
-  history.push(`/Spots/${spotId}`)
+  const attempt = dispatch(deleteAReview(parseInt(userReview.id)))
+  if(attempt){history.push(`/Spots/${spotId}`)
+  setRender(!render)}
+  // console.log("success")}
+  // else console.log('delete review failed')
 }
 
   useEffect(() => {
@@ -64,7 +71,7 @@ const DeleteReview = async (e) => {
   if(!spot || !spot.SpotImages){
     return null
   }
-  console.log(spot)
+  // console.log(spot)
   return (
     <div>
       <div className="spotDetails">

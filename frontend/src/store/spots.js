@@ -95,7 +95,7 @@ export const editASpot = (spot) => async dispatch => {
   })
   if(response.ok) {
     const spot = await response.json()
-    await dispatch(addSpot(spot))
+    await dispatch(oneSpot(spot))
     return spot
   }
   return null
@@ -123,6 +123,7 @@ export const addSpotImage = ({ url, id }) => async (dispatch) => {
   if (response.ok) {
       dispatch(singleSpot(id))
   }
+    return null
 }
 
 const initialState = {

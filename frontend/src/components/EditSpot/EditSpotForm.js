@@ -17,26 +17,22 @@ function EditSpot({ setCreateModal }) {
   const [city, setCity] = useState(spot.city)
   const [state, setState] = useState(spot.state)
   const [country, setCountry] = useState(spot.country)
-  const [lat, setLat] = useState(spot.lat)
-  const [lng, setLng] = useState(spot.lng)
   const [name, setName] = useState(spot.name)
   const [description, setDescription] = useState(spot.description)
   const [price, setPrice] = useState(spot.price)
-  // const [image, setImage] = useState(spot.SpotImages[0].url || null)
   const [validationErrors, setValidationErrors] = useState([]);
 
-  const currValues = {
-
-    id: spot.id,
-    address, city,
-    state, country,
-    lat: 1,
-    lng: 1,
-    name, description,
-    price,
-    // image
-  }
-
+  useEffect(() => {
+    const err = []
+    if (!address) err.push('Address is required')
+    if (!city) err.push('City is required')
+    if (!state) err.push('State is required')
+    if (!country) err.push('Country is required')
+    if (!name) err.push('Name is required')
+    if (!description) err.push('Description is required')
+    if (!price) err.push('Price per night is required')
+    setValidationErrors(err)
+  }, [address, city, state, country, name, description, price])
 
   const onsubmit = async (e) => {
     e.preventDefault()
@@ -47,10 +43,9 @@ function EditSpot({ setCreateModal }) {
       lat: 1,
       lng: 1,
       name, description,
-      price,
-      // image
+      price
     }
-    console.log(payload)
+    // console.log(payload)
     const editSpot = await dispatch(editASpot(payload)).catch(
       async (res) => {
         const data = await res.json();

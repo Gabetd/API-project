@@ -14,6 +14,7 @@ function CreateReview({ setCreateReview }) {
   const [stars, setStars] = useState(0)
   const [validationErrors, setValidationErrors] = useState([]);
   const [frontErrors, setFrontErrors] = useState([])
+  const [render, setRender] = useState(false)
 
   const id = parseInt(spotId)
   useEffect(() => {
@@ -29,7 +30,8 @@ function CreateReview({ setCreateReview }) {
   let newReview
   const onsubmit = async (e) => {
     e.preventDefault()
-    console.log("payload", review, stars, id)
+    setRender(!render)
+    // console.log("payload", review, stars, id)
     const payload = {
       review,
       stars,
@@ -41,13 +43,15 @@ function CreateReview({ setCreateReview }) {
         if (data && data.errors) {
           setValidationErrors(frontErrors)
           setValidationErrors(data.errors)
+          // console.log("data", data)
+          ;
         }
       }
     )
     setCreateReview(false)
-    history.push(`/Spots/${id}`)
+    history.push(`/Spots/${spotId}`)
   }
-  console.log("new Review = ", newReview)
+  // console.log("new Review = ", newReview)
 
 
   return (

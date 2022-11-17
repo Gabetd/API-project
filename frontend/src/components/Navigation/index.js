@@ -53,7 +53,7 @@ function Navigation({ isLoaded }) {
               <SignupForm setShowModal={setShowModal} />}
           </Modal>
         )}
-          <button onClick={() => setCreateModal(true)}>Become a Host</button>
+          <button  hidden={!sessionUser} onClick={() => setCreateModal(true)}>Become a Host</button>
           {createModal && (
             <Modal onClose={() => setCreateModal(false)}>
               <CreateSpot setCreateModale={setCreateModal} />

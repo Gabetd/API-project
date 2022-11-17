@@ -22,6 +22,18 @@ function CreateSpot({ setCreateModal }) {
   const [url, setUrl] = useState('')
   const [validationErrors, setValidationErrors] = useState([]);
 
+  useEffect(() => {
+    const err = []
+    if (!address) err.push('Address is required')
+    if (!city) err.push('City is required')
+    if (!state) err.push('State is required')
+    if (!country) err.push('Country is required')
+    if (!name) err.push('Name is required')
+    if (!description) err.push('Description is required')
+    if (!price) err.push('Price per night is required')
+    if (!url) err.push('Image url is required')
+    setValidationErrors(err)
+  }, [address, city, state, country, name, description, price])
 
 
 
@@ -42,8 +54,11 @@ function CreateSpot({ setCreateModal }) {
           setValidationErrors(data.errors)
         }
       });
-
+      const id = newSpot.id
+      // console.log(id)
+    const spotImage = await dispatch(addSpotImage({url, id}))
     history.push(`/Spots/${newSpot.id}`)
+    setCreateModal(false)
   }
 
 
@@ -112,15 +127,15 @@ function CreateSpot({ setCreateModal }) {
             min={1}
           />
         </label>
-        {/* <label>
+        <label>
           Image Url
           <input
             type="text"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
             required
           />
-        </label> */}
+        </label>
         <button type="submit">Create Spot</button>
       </form>
     </div>
