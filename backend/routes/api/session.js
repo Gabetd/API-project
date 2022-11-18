@@ -64,9 +64,7 @@ router.post(
       token: null
     }
     result.token = await setTokenCookie(res, user);
-
     res.status(200);
-
     return res.json(result);
   }
 );
@@ -99,7 +97,7 @@ router.get(
       return res.json(
         user.toSafeObject()
       );
-    } else return res.json({});
+    } else return null;
   }
 );
 

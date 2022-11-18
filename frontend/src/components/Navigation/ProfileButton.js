@@ -33,6 +33,7 @@ function ProfileButton({ user, setLogin, setShowModal }) {
     dispatch(sessionActions.logout());
   };
 
+  // if(user && (!user.username && !user.email)) {logout()}
 
   return (
     <div className="top-bar">
