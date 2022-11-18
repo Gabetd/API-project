@@ -11,6 +11,7 @@ import SignupForm from '../SignupFormModal/SignupForm';
 import LoginForm from '../LoginFormModal/LoginForm';
 import CreateSpot from '../CreateSpot/CreateSpot';
 import logo from '../logo/logo.png'
+import CreateSpotModal from '../CreateSpot';
 
 
 function Navigation({ isLoaded }) {
@@ -34,11 +35,11 @@ function Navigation({ isLoaded }) {
 
   return (
     <div id='topBar'>
-      <ul>
-        <li>
           <NavLink exact to="/">
           <img id='logo' src={logo}></img>
           </NavLink>
+      <ul className='icons'>
+        <li>
           {isLoaded && (
             <ProfileButton
             user={sessionUser}
@@ -53,12 +54,10 @@ function Navigation({ isLoaded }) {
               <SignupForm setShowModal={setShowModal} />}
           </Modal>
         )}
-          <button  hidden={!sessionUser} onClick={() => setCreateModal(true)}>Become a Host</button>
-          {createModal && (
-            <Modal onClose={() => setCreateModal(false)}>
-              <CreateSpot setCreateModale={setCreateModal} />
-            </Modal>
-          )}
+          {/* <button  hidden={!sessionUser} onClick={() => setCreateModal(true)}>Become a Host</button> */}
+          {/* {createModal && ( */}
+              <CreateSpotModal />
+          {/* // )} */}
       </ul>
       </div>
   );

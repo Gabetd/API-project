@@ -5,14 +5,14 @@ import EditSpot from './EditSpotForm';
 
 
 function EditSpotModal() {
-const [createModal, setCreateModal] = useState(false);
+const [editModal, setEditModal] = useState(false);
 
 return(
   <>
-  <button onClick={()=> setCreateModal(true)}>Edit Spot</button>
-  {createModal && (
-    <Modal onClose={()=> setCreateModal(false)}>
-      <EditSpot setCreateModal={true} />
+  <button onClick={()=> setEditModal(true)}>Edit Spot</button>
+  {editModal && (
+    <Modal onClose={()=> setEditModal(false)}>
+      <EditSpot setEditModal={setEditModal} />
     </Modal>
   )}
   </>

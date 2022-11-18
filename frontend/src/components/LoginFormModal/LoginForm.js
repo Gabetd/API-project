@@ -64,7 +64,7 @@ function LoginForm({ setShowModal }) {
           required
         />
       </label>
-      <button type="submit" hidden={errors.length !== 0}>Log In</button>
+      <button type="submit" >Log In</button>
       <button type='submit' onClick={demoLogin}>Log In as Demo User</button>
     </form>
   );

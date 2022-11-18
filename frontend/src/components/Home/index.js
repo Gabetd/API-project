@@ -24,8 +24,7 @@ const Home = () => {
           {Object.values(spots).map(spot => (
             <div key={spot.id} className='card-holder'>
             <NavLink to={`/spots/${spot.id}`} >
-              <div>
-                <div>
+                <div className="inner-card">
                   <img className="card" src={spot.previewImage}/>
                   <div>
                     {spot.city}, {spot.state}, {spot.country}
@@ -33,13 +32,12 @@ const Home = () => {
                   <div>
                   ★{spot.avgStarRating}
                   </div>
-                </div>
-                <div>
                   <div>
                     $ {spot.price} per night
                   </div>
                 </div>
-              </div>
+                <div>
+                </div>
             </NavLink>
           </div>
           ))}

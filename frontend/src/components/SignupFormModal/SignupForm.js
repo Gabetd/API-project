@@ -115,7 +115,7 @@ function SignupForm({setShowModal}) {
           required
         />
       </label>
-      <button type="submit" hidden={errors.length !== 0}>Sign Up</button>
+      <button type="submit">Sign Up</button>
     </form>
   );
 }

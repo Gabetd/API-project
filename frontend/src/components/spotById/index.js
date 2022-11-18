@@ -14,8 +14,8 @@ import Rerender from "../Rerender"
 
 const SpotById = () => {
   const user = useSelector(state => state.session.user)
-  const [createModal, setCreateModal] = useState(false)
   const [createReview, setCreateReview] = useState(false)
+  const [editModal, setEditModal] = useState(false)
   const [errors, setErrors] = useState([])
   const { spotId } = useParams()
   const spot = useSelector(state => state.spot.oneSpot)
@@ -31,7 +31,7 @@ const SpotById = () => {
 
   useEffect(() => {
     dispatch(getAllSpotReviews(spotId))
-  }, [dispatch, spotId])
+  }, [dispatch, spotId, reviews.length])
 
   const DeleteSpot = async (e) => {
     e.preventDefault()
@@ -61,7 +61,7 @@ const DeleteReview = async (e) => {
 
   useEffect(() => {
     dispatch(singleSpot(+spotId))
-  }, [spotId])
+  }, [dispatch, spotId, reviews.length])
 
   if(!spot || !spot.SpotImages){
     return null
@@ -69,9 +69,11 @@ const DeleteReview = async (e) => {
   // console.log(spot)
   return (
     <div>
-      <div className="spotDetails">
+
+    <div className="outer-most">
+      <div className="spot-details">
         <p className="details-name">{spot.name}</p>
-        <p className="details-star-rating">★{spot.avgStarRating} • {spot.numReviews} {review} • {spot.city}, {spot.state}, {spot.country}</p>
+        <p className="details-stars">★{spot.avgStarRating} • {spot.numReviews} {review} • {spot.city}, {spot.state}, {spot.country}</p>
       </div>
       <div className="outer">
 
@@ -80,23 +82,23 @@ const DeleteReview = async (e) => {
       {spot.id}
     </div>
     <img className="spot-details" src={spot.SpotImages[0]? spot.SpotImages[0].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
-    <div>
     <img className="side-pic" src={spot.SpotImages[1]? spot.SpotImages[1].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
     <img className="side-pic" src={spot.SpotImages[2]? spot.SpotImages[2].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
-    <div>
     <img className="side-pic" src={spot.SpotImages[3]? spot.SpotImages[3].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
     <img className="side-pic" src={spot.SpotImages[4]? spot.SpotImages[4].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
+    <div>
+    <div>
     </div>
     </div>
     </div>
       </div>
     <div id="button holder">
-    <button onClick={()=> {setCreateModal(true)}}
+    <button onClick={()=> {setEditModal(true)}}
       hidden={spotOwner ? false : true}
       >Edit Spot</button>
-             {spotOwner && (createModal && (
-               <Modal onClose={() => setCreateModal(false)}>
-            <EditSpot setCreateModal={setCreateModal} />
+             {spotOwner && (editModal && (
+               <Modal onClose={() => setEditModal(false)}>
+            <EditSpot setEditModal={setEditModal} />
           </Modal>
           ))}
 
@@ -114,13 +116,16 @@ const DeleteReview = async (e) => {
             <CreateReview setCreateReview={setCreateReview} user={user} />
           </Modal>
           )}
+      </div>
+      <div className='reviews-holder'>
           { reviews.map(review =>
-          <div key={review.id}>
+          <div className='reviews' key={review.id}>
             <div>★{review.stars}, {review.User.firstName}</div>
             <div>{review.review}</div>
           </div>
             )}
-      </div>
+            </div>
+            </div>
   )
 
 }

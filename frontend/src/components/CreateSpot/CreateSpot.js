@@ -6,7 +6,7 @@ import logo from '../logo/logo.png'
 
 
 
-function CreateSpot({setCreateModal}) {
+function CreateSpot({ setCreateModal }) {
   const user = useSelector(state => state.session)
   const dispatch = useDispatch()
   const history = useHistory()
@@ -24,31 +24,68 @@ function CreateSpot({setCreateModal}) {
 
 
 
-let newSpot
-  const onsubmit = async (e) => {
-    e.preventDefault()
-    const payload = {
-      address, city,
-      state, country,
-      lat: 1,
-      lng: 1,
-      name, description,
-      price
-    }
+  useEffect(() => {
+    const err = []
+    if (!address) err.push('Address is required')
+    if (!city) err.push('City is required')
+    if (!state) err.push('State is required')
+    if (!country) err.push('Country is required')
+    if (!name) err.push('Name is required')
+    if (!description) err.push('Description is required')
+    if (!price) err.push('Price per night is required')
+    setErrors(err)
+  }, [address, city, state, country, name, description, price])
 
-    newSpot = await dispatch(addASpot(payload))
-    .then(() => setCreateModal(false))
-    .catch(
 
-      async (res) => {
-        console.log('catch is running')
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(errors, data.errors);
-        }
-      })
-    history.push(`/Spots/${newSpot.id}`)
+// let newSpot
+//   const onsubmit = async (e) => {
+//     e.preventDefault()
+//     const payload = {
+//       address, city,
+//       state, country,
+//       lat: 1,
+//       lng: 1,
+//       name, description,
+//       price
+//     }
+
+//     newSpot = await dispatch(addASpot(payload))
+//     .then(() => setCreateModal(false))
+//     .catch(
+
+//       async (res) => {
+//         console.log('catch is running')
+//         const data = await res.json();
+//         if (data && data.errors) {
+//           setErrors(errors, data.errors);
+//         }
+//       })
+//     history.push(`/Spots/${newSpot.id}`)
+//   }
+
+
+
+
+const onsubmit = async (e) => {
+  e.preventDefault();
+if (!errors.length) {
+  const payload = {
+    address,
+    city,
+    state,
+    country,
+    name,
+    description,
+    price,
+    url,
   }
+  console.log(payload)
+  const newSpot = await dispatch(addASpot(payload))
+  setCreateModal(false)
+  console.log(newSpot)
+  history.push(`/spots/${newSpot.id}`)
+}
+}
 
 
   return (
@@ -117,15 +154,15 @@ let newSpot
             min={1}
           />
         </label>
-        {/* <label>
+        <label>
           Image Url
           <input
             type="text"
-            value={image}
+            value={url}
             onChange={(e) => setUrl(e.target.value)}
             required
           />
-        </label> */}
+        </label>
         <button type="submit" hidden={errors.length !== 0}>Create Spot</button>
       </form>
     </div>

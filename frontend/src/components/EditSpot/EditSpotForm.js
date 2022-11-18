@@ -9,18 +9,18 @@ import logo from '../logo/logo.png'
 
 
 
-function EditSpot({ setCreateModal }) {
+function EditSpot({ setEditModal }) {
   const user = useSelector(state => state.session)
   const spot = useSelector(state => state.spot.oneSpot)
   const dispatch = useDispatch()
   const history = useHistory()
-  const [address, setAddress] = useState(spot.address)
-  const [city, setCity] = useState(spot.city)
-  const [state, setState] = useState(spot.state)
-  const [country, setCountry] = useState(spot.country)
-  const [name, setName] = useState(spot.name)
-  const [description, setDescription] = useState(spot.description)
-  const [price, setPrice] = useState(spot.price)
+  const [address, setAddress] = useState(spot.address || "")
+  const [city, setCity] = useState(spot.city || "")
+  const [state, setState] = useState(spot.state || "")
+  const [country, setCountry] = useState(spot.country || "")
+  const [name, setName] = useState(spot.name || "")
+  const [description, setDescription] = useState(spot.description || "")
+  const [price, setPrice] = useState(spot.price || "")
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
@@ -44,11 +44,12 @@ function EditSpot({ setCreateModal }) {
       lat: 1,
       lng: 1,
       name, description,
-      price
+      price,
+      previewImage: spot.previewImage
     }
-    // console.log(payload)
+
     const editSpot = await dispatch(editASpot(payload))
-    .then(() => setCreateModal(false))
+    .then(() => setEditModal(false))
     .catch(
       async (res) => {
         const data = await res.json();
@@ -66,8 +67,8 @@ function EditSpot({ setCreateModal }) {
         <img  className='modal-logo'src={logo} />
         <div>
           <ul>
-            {errors.map((error, idx) => (
-              <li key={idx}>{error}</li>))}
+            {errors.length > 0 && errors.map((error) => (
+              <li key={error}>{error}</li>))}
           </ul>
         </div>
         <label>Address

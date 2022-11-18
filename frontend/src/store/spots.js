@@ -8,10 +8,11 @@ const RESET_SPOT = 'spots/resetSpot'
 const EDIT_SPOT = 'spots/editSpot'
 
 //---Action---//
-const editSpot = (spot) => {
+const editSpot = (spot, id) => {
   return{
     type: EDIT_SPOT,
-    spot
+    spot,
+    id
   }
 }
 
@@ -82,45 +83,54 @@ export const currOwnerSpots = () => async dispatch => {
 }
 
 export const addASpot = (spot) => async dispatch => {
-  const { address, city, state, country, name, description, price} = spot;
+  const { address, city, state, country, name, description, price, url} = spot;
   const res = await csrfFetch(`/api/spots`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(spot)
-    //   {address,
-    //   city,
-    //   state,
-    //   country,
-    //   lat: 1,
-    //   lng: 1,
-    //   name,
-    //   description,
-    //   price
-    // })
+    body: JSON.stringify(
+      {address,
+      city,
+      state,
+      country,
+      lat: 1,
+      lng: 1,
+      name,
+      description,
+      price
+    })
   })
   if (res.ok) {
   console.log("response", res)
-    const spot = await res.json()
-    await dispatch(addSpot(spot))
-    return spot
+    const data = await res.json()
+    console.log(data.id)
+    await dispatch(addSpotImage(data, url))
+    console.log(data)
+    return data
   }
   console.log("response", res)
   return null
 }
 
-export const editASpot = (spot) => async dispatch => {
-  console.log("edit spot thunk")
-  const response = await csrfFetch(`/api/spots/${spot.id}`, {
-    method: 'PUT',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(spot)
-  })
-  if(response.ok) {
-    const spot = await response.json()
-    await dispatch(editSpot(spot))
-    return spot
-
-  }
+export const editASpot = (payload) => async (dispatch) => {
+  const { id, address, city, state, country, lat, lng, name, description,
+    price } = payload
+const res = await csrfFetch('/api/spots', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        address, city,
+        state, country,
+        lat, lng,
+        name, description,
+        price
+    })
+})
+if (res.ok) {
+    const data = await res.json()
+    console.log("data = ",data)
+    await dispatch(addSpot(data))
+    return res
+}
   return null
 }
 
@@ -129,14 +139,15 @@ export const removeASpot = (spotId) => async dispatch => {
     method: 'DELETE'
   })
   if (response.ok) {
-    dispatch(removeSpot(spotId))
+   await dispatch(removeSpot(spotId))
   }
   return null
 }
 
 
-export const addSpotImage = ({ url, id }) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${id}/images`, {
+export const addSpotImage = (spot, url) => async (dispatch) => {
+  console.log("spot image spot = ", spot)
+  const res = await csrfFetch(`/api/spots/${spot.id}/images`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -144,8 +155,11 @@ export const addSpotImage = ({ url, id }) => async (dispatch) => {
           preview: true
       })
   })
-  if (response.ok) {
-      dispatch(singleSpot(id))
+  if (res.ok) {
+      const data = res.json()
+      console.log("add image response = ", data)
+     await dispatch(addSpot(spot))
+    //  return s
   }
     return null
 }
@@ -162,7 +176,7 @@ const spotReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case GET_SPOTS:
-      let newSpots = {}
+      const newSpots = {}
       newState = { ...state, allSpots: {...state.allSpots} }
       action.spots.Spots.forEach(spot => {
         newSpots[spot.id] = spot
@@ -177,8 +191,9 @@ const spotReducer = (state = initialState, action) => {
       console.log("create state = ",newState.oneSpot)
       return newState
       case EDIT_SPOT:
-        newState = {...state}
-        newState[action.spot.id] = {...newState[action.spot], ...action.spot};
+        newState = {...state, oneSpot: {...state.spot}, allSpots: {...state.allSpots}}
+        newState.allSpots[action.id] = action.spot;
+        newState.oneSpot = action.spot
         return newState
     case ONE_SPOT:
       newState = { ...state, oneSpot: {...state.oneSpot}}
@@ -188,6 +203,7 @@ const spotReducer = (state = initialState, action) => {
       return initialState
     case REMOVE_SPOT:
       newState = { ...state, allSpots: {...state.allSpots}}
+
       delete newState.allSpots[action.spotId]
       return newState;
     default:
