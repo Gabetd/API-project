@@ -42,8 +42,9 @@ const SpotById = () => {
 
       }
       )
-      if (attempt) {history.push('/')
-      dispatch(getAllSpotReviews(spotId))
+      if (attempt) {
+
+        history.push('/')
     }
 
   }
