@@ -106,10 +106,8 @@ const reviewReducer = (state = initialState, action) => {
       action.reviews.Reviews.forEach(review => {
         currReviews[review.id] = review
       })
-
       newState.usersReviews = currReviews
       return newState
-
     case GET_SPOT_REVIEWS:
       newState = { ...state, allReviews:{ ...state.allReviews}}
       let newReviews = {}

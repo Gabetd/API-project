@@ -48,15 +48,15 @@ function EditSpot({ setEditModal }) {
       previewImage: spot.previewImage
     }
 
-    const editSpot = await dispatch(editASpot(payload))
-    .then(() => setEditModal(false))
-    .catch(
-      async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors)
-        }
-      });
+    const editSpot = await dispatch(editASpot(payload, spot.id))
+    setEditModal(false)
+    // .catch(
+    //   async (res) => {
+    //     const data = await res.json();
+    //     if (data && data.errors) {
+    //       setErrors(data.errors)
+    //     }
+    //   });
     history.push(`/Spots/${spot.id}`)
   }
 

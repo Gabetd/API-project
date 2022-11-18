@@ -309,6 +309,7 @@ router.put('/:spotId', requireAuth, async (req, res) => {
   const spotId = req.params.spotId;
   const { user } = req
   const spot = await Spot.findByPk(spotId)
+  console.log("hit the backend edit")
 
   if(!spot){
     res.status(404);
@@ -317,7 +318,6 @@ router.put('/:spotId', requireAuth, async (req, res) => {
       "statusCode": 404
     })
   }
-
   if(spot.ownerId !== user.id){
     res.status(403);
     res.json({
@@ -325,7 +325,6 @@ router.put('/:spotId', requireAuth, async (req, res) => {
       "statusCode": 403
     })
   }
-
   try{
     spot.address = address;
     spot.city = city;
@@ -336,8 +335,6 @@ router.put('/:spotId', requireAuth, async (req, res) => {
     spot.name = name;
     spot.description = description;
     spot.price = price;
-
-
     res.status(200);
     res.json(spot)
   }catch(e){

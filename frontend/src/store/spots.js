@@ -8,11 +8,10 @@ const RESET_SPOT = 'spots/resetSpot'
 const EDIT_SPOT = 'spots/editSpot'
 
 //---Action---//
-const editSpot = (spot, id) => {
+const editSpot = (spot) => {
   return{
     type: EDIT_SPOT,
-    spot,
-    id
+    spot
   }
 }
 
@@ -111,28 +110,21 @@ export const addASpot = (spot) => async dispatch => {
   return null
 }
 
-export const editASpot = (payload) => async (dispatch) => {
-  const { id, address, city, state, country, lat, lng, name, description,
-    price } = payload
-const res = await csrfFetch('/api/spots', {
-    method: 'POST',
+export const editASpot = (spot) => async (dispatch) => {
+  console.log(spot)
+  const res = await csrfFetch(`/api/spots/${spot.id}`, {
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        address, city,
-        state, country,
-        lat, lng,
-        name, description,
-        price
-    })
-})
+    body: JSON.stringify(spot)
+});
+
 if (res.ok) {
-    const data = await res.json()
-    console.log("data = ",data)
-    await dispatch(addSpot(data))
-    return res
+    const data = await res.json();
+    console.log("data from edit = ", data)
+    await dispatch(editSpot(data));
+    return data;
 }
-  return null
-}
+};
 
 export const removeASpot = (spotId) => async dispatch => {
   const response = await csrfFetch(`/api/spots/${spotId}`, {
@@ -191,10 +183,9 @@ const spotReducer = (state = initialState, action) => {
       console.log("create state = ",newState.oneSpot)
       return newState
       case EDIT_SPOT:
-        newState = {...state, oneSpot: {...state.spot}, allSpots: {...state.allSpots}}
-        newState.allSpots[action.id] = action.spot;
-        newState.oneSpot = action.spot
-        return newState
+        newState={...state}
+        newState.oneSpot = { ...newState[action.spot.id], ...action.spot };
+        return newState;
     case ONE_SPOT:
       newState = { ...state, oneSpot: {...state.oneSpot}}
       newState.oneSpot = { ...action.spot }
