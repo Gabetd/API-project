@@ -5,8 +5,16 @@ const ONE_SPOT = 'spot/oneSpot'
 const CREATE_SPOT = 'spots/createSpot'
 const REMOVE_SPOT = 'spots/removeSpot'
 const RESET_SPOT = 'spots/resetSpot'
+const EDIT_SPOT = 'spots/editSpot'
 
 //---Action---//
+const editSpot = (spot) => {
+  return{
+    type: EDIT_SPOT,
+    spot
+  }
+}
+
 const getSpots = (spots) => {
   return {
     type: GET_SPOTS,
@@ -74,7 +82,8 @@ export const currOwnerSpots = () => async dispatch => {
 }
 
 export const addASpot = (spot) => async dispatch => {
-  const { address, city, state, country, name, description, price, url} = spot;
+  console.log("hit the thunk")
+  const { address, city, state, country, name, description, price} = spot;
   const response = await csrfFetch(`/api/spots`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -92,7 +101,7 @@ export const addASpot = (spot) => async dispatch => {
   })
   if (response.ok) {
     const spot = await response.json()
-        await dispatch(addSpot(url, spot.id))
+        await dispatch(addSpot(spot.id))
         return spot
   }
   return null
@@ -107,7 +116,7 @@ export const editASpot = (spot) => async dispatch => {
   })
   if(response.ok) {
     const spot = await response.json()
-    await dispatch(oneSpot(spot))
+    await dispatch(editSpot(spot))
     return spot
 
   }
@@ -164,7 +173,12 @@ const spotReducer = (state = initialState, action) => {
       newState.allSpots = {...state.allSpots}
       newState.allSpots[action.spot.id] = action.spot
       newState.oneSpot = action.spot
+      console.log("create state = ",newState.oneSpot)
       return newState
+      case EDIT_SPOT:
+        newState = {...state}
+        newState[action.spot.id] = {...newState[action.spot], ...action.spot};
+        return newState
     case ONE_SPOT:
       newState = { ...state, oneSpot: {...state.oneSpot}}
       newState.oneSpot = { ...action.spot }

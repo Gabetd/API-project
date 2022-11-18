@@ -50,9 +50,7 @@ function CreateReview({ setCreateReview, user }) {
       }
     )
     console.log("before clear review")
-    // await dispatch(clearReviews())
     console.log("new Review = ", newReview)
-    // history.push(`/Spots/${spotId}`)
     setCreateReview(false)
   }
 
@@ -97,6 +95,7 @@ function CreateReview({ setCreateReview, user }) {
         </div>
         <button
           onClick={onSubmit}
+          hidden={errors.length !== 0}
           type="submit"
         >submit Review</button>
       </form>}

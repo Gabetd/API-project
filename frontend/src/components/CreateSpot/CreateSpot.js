@@ -21,7 +21,7 @@ function CreateSpot({ setCreateModal }) {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState(0)
   const [url, setUrl] = useState('')
-  const [validationErrors, setValidationErrors] = useState([]);
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     const err = []
@@ -32,13 +32,14 @@ function CreateSpot({ setCreateModal }) {
     if (!name) err.push('Name is required')
     if (!description) err.push('Description is required')
     if (!price) err.push('Price per night is required')
-    if (!url) err.push('Image url is required')
-    setValidationErrors(err)
-  }, [address, city, state, country, name, description, price])
+    // if (!url) err.push('Image url is required')
+    setErrors(err)
+  }, [address, city, state, country, name, description, price, url])
 
 
 
-  const onsubmit = async (e) => {
+  const onSubmit = async (e) => {
+    console.log("at least it made it to the submit")
     setCreateModal(false)
     e.preventDefault()
     const payload = {
@@ -55,23 +56,23 @@ function CreateSpot({ setCreateModal }) {
       async (res) => {
         const data = await res.json();
         if (data && data.errors) {
-          setValidationErrors(data.errors)
+          setErrors(data.errors)
         }
       });
       const id = newSpot.id
       console.log(id)
-    const spotImage = await dispatch(addSpotImage({url, id}))
-    history.push(`/Spots/${newSpot.id}`)
+    // const spotImage = await dispatch(addSpotImage({url, id}))
+    // history.push(`/Spots/${newSpot.id}`)
   }
 
 
   return (
     <div>
-      <form className='base-form' onSubmit={onsubmit}>
+      <form className='base-form' onSubmit={onSubmit}>
         <img  className='modal-logo'src={logo} />
         <div>
           <ul>
-            {validationErrors.map((error, idx) => (
+            {errors.map((error, idx) => (
               <li key={idx}>{error}</li>))}
           </ul>
         </div>
@@ -131,7 +132,7 @@ function CreateSpot({ setCreateModal }) {
             min={1}
           />
         </label>
-        <label>
+        {/* <label>
           Image Url
           <input
             type="text"
@@ -139,8 +140,8 @@ function CreateSpot({ setCreateModal }) {
             onChange={(e) => setUrl(e.target.value)}
             required
           />
-        </label>
-        <button type="submit">Create Spot</button>
+        </label> */}
+        <button type="submit" hidden={errors.length !== 0}>Create Spot</button>
       </form>
     </div>
   )

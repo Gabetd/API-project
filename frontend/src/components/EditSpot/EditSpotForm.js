@@ -21,7 +21,7 @@ function EditSpot({ setCreateModal }) {
   const [name, setName] = useState(spot.name)
   const [description, setDescription] = useState(spot.description)
   const [price, setPrice] = useState(spot.price)
-  const [validationErrors, setValidationErrors] = useState([]);
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     const err = []
@@ -32,7 +32,7 @@ function EditSpot({ setCreateModal }) {
     if (!name) err.push('Name is required')
     if (!description) err.push('Description is required')
     if (!price) err.push('Price per night is required')
-    setValidationErrors(err)
+    setErrors(err)
   }, [address, city, state, country, name, description, price])
 
   const onsubmit = async (e) => {
@@ -47,11 +47,13 @@ function EditSpot({ setCreateModal }) {
       price
     }
     // console.log(payload)
-    const editSpot = await dispatch(editASpot(payload)).catch(
+    const editSpot = await dispatch(editASpot(payload))
+    .then(() => setCreateModal(false))
+    .catch(
       async (res) => {
         const data = await res.json();
         if (data && data.errors) {
-          setValidationErrors(data.errors)
+          setErrors(data.errors)
         }
       });
     history.push(`/Spots/${spot.id}`)
@@ -64,7 +66,7 @@ function EditSpot({ setCreateModal }) {
         <img  className='modal-logo'src={logo} />
         <div>
           <ul>
-            {validationErrors.map((error, idx) => (
+            {errors.map((error, idx) => (
               <li key={idx}>{error}</li>))}
           </ul>
         </div>
@@ -133,7 +135,7 @@ function EditSpot({ setCreateModal }) {
             required
           />
         </label> */}
-        <button type="submit">Edit Spot</button>
+        <button type="submit" hidden={errors.length !== 0}>Edit Spot</button>
       </form>
     </div>
   )

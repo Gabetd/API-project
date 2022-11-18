@@ -27,6 +27,7 @@ function LoginForm({ setShowModal }) {
       async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
+        setErrors(["Please enter valid credential and password"])
       }
       );
   };
@@ -63,7 +64,7 @@ function LoginForm({ setShowModal }) {
           required
         />
       </label>
-      <button type="submit">Log In</button>
+      <button type="submit" hidden={errors.length !== 0}>Log In</button>
       <button type='submit' onClick={demoLogin}>Log In as Demo User</button>
     </form>
   );

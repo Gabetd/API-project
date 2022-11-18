@@ -16,8 +16,6 @@ const SpotById = () => {
   const user = useSelector(state => state.session.user)
   const [createModal, setCreateModal] = useState(false)
   const [createReview, setCreateReview] = useState(false)
-  const [render, setRender] = useState(false)
-
   const [errors, setErrors] = useState([])
   const { spotId } = useParams()
   const spot = useSelector(state => state.spot.oneSpot)
@@ -33,7 +31,7 @@ const SpotById = () => {
 
   useEffect(() => {
     dispatch(getAllSpotReviews(spotId))
-  }, [dispatch, spotId, reviews.length])
+  }, [dispatch, spotId])
 
   const DeleteSpot = async (e) => {
     e.preventDefault()
@@ -41,6 +39,7 @@ const SpotById = () => {
       async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors)
+
       }
       )
       if (attempt) {history.push('/')
@@ -62,7 +61,7 @@ const DeleteReview = async (e) => {
 
   useEffect(() => {
     dispatch(singleSpot(+spotId))
-  }, [dispatch, spotId, reviews])
+  }, [spotId])
 
   if(!spot || !spot.SpotImages){
     return null
@@ -106,7 +105,6 @@ const DeleteReview = async (e) => {
       >Delete Spot</button>
         </div>
           <p>{spot.description}</p>
-          <NavLink to={`/spots/${spotId}`}>
            <button hidden={!spotReviewed} onClick={DeleteReview}>Delete Review</button>
            <button hidden={spotReviewed || spotOwner || !user}
            onClick={()=> {setCreateReview(true)}}
@@ -116,7 +114,6 @@ const DeleteReview = async (e) => {
             <CreateReview setCreateReview={setCreateReview} user={user} />
           </Modal>
           )}
-          </NavLink>
           { reviews.map(review =>
           <div key={review.id}>
             <div>★{review.stars}, {review.User.firstName}</div>
