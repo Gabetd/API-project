@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom'
-import { addASpot, addSpotImage } from "../../store/spots";
+import { addASpot } from "../../store/spots";
 import logo from '../logo/logo.png'
 
 
 
-
-function CreateSpot({ setCreateModal }) {
+function CreateSpot({setCreateModal}) {
   const user = useSelector(state => state.session)
   const dispatch = useDispatch()
   const history = useHistory()
@@ -23,24 +22,10 @@ function CreateSpot({ setCreateModal }) {
   const [url, setUrl] = useState('')
   const [errors, setErrors] = useState([]);
 
-  useEffect(() => {
-    const err = []
-    if (!address) err.push('Address is required')
-    if (!city) err.push('City is required')
-    if (!state) err.push('State is required')
-    if (!country) err.push('Country is required')
-    if (!name) err.push('Name is required')
-    if (!description) err.push('Description is required')
-    if (!price) err.push('Price per night is required')
-    // if (!url) err.push('Image url is required')
-    setErrors(err)
-  }, [address, city, state, country, name, description, price, url])
 
 
-
-  const onSubmit = async (e) => {
-    console.log("at least it made it to the submit")
-    setCreateModal(false)
+let newSpot
+  const onsubmit = async (e) => {
     e.preventDefault()
     const payload = {
       address, city,
@@ -50,26 +35,26 @@ function CreateSpot({ setCreateModal }) {
       name, description,
       price
     }
-    const newSpot = await dispatch(addASpot(payload))
+
+    newSpot = await dispatch(addASpot(payload))
     .then(() => setCreateModal(false))
     .catch(
+
       async (res) => {
+        console.log('catch is running')
         const data = await res.json();
         if (data && data.errors) {
-          setErrors(data.errors)
+          setErrors(errors, data.errors);
         }
-      });
-      const id = newSpot.id
-      console.log(id)
-    // const spotImage = await dispatch(addSpotImage({url, id}))
-    // history.push(`/Spots/${newSpot.id}`)
+      })
+    history.push(`/Spots/${newSpot.id}`)
   }
 
 
   return (
     <div>
-      <form className='base-form' onSubmit={onSubmit}>
-        <img  className='modal-logo'src={logo} />
+      <form onSubmit={onsubmit}  className='base-form'>
+      <img  className='modal-logo'src={logo} />
         <div>
           <ul>
             {errors.map((error, idx) => (
@@ -136,7 +121,7 @@ function CreateSpot({ setCreateModal }) {
           Image Url
           <input
             type="text"
-            value={url}
+            value={image}
             onChange={(e) => setUrl(e.target.value)}
             required
           />

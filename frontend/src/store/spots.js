@@ -82,28 +82,29 @@ export const currOwnerSpots = () => async dispatch => {
 }
 
 export const addASpot = (spot) => async dispatch => {
-  console.log("hit the thunk")
   const { address, city, state, country, name, description, price} = spot;
-  const response = await csrfFetch(`/api/spots`, {
+  const res = await csrfFetch(`/api/spots`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      address,
-      city,
-      state,
-      country,
-      lat: 1,
-      lng: 1,
-      name,
-      description,
-      price
-    })
+    body: JSON.stringify(spot)
+    //   {address,
+    //   city,
+    //   state,
+    //   country,
+    //   lat: 1,
+    //   lng: 1,
+    //   name,
+    //   description,
+    //   price
+    // })
   })
-  if (response.ok) {
-    const spot = await response.json()
-        await dispatch(addSpot(spot.id))
-        return spot
+  if (res.ok) {
+  console.log("response", res)
+    const spot = await res.json()
+    await dispatch(addSpot(spot))
+    return spot
   }
+  console.log("response", res)
   return null
 }
 

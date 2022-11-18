@@ -11,7 +11,7 @@ return(
   <button onClick={()=> setCreateModal(true)}>Become a Host</button>
   {createModal && (
     <Modal onClose={()=> setCreateModal(false)}>
-      <CreateSpot setCreateModal={true} />
+      <CreateSpot setCreateModal={setCreateModal} />
     </Modal>
   )}
   </>
