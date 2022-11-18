@@ -71,15 +71,14 @@ const DeleteReview = async (e) => {
     <div>
 
     <div className="outer-most">
-      <div className="spot-details">
-        <p className="details-name">{spot.name}</p>
-        <p className="details-stars">★{spot.avgStarRating} • {spot.numReviews} {review} • {spot.city}, {spot.state}, {spot.country}</p>
+      <div className="spot-details info">
+        <p className="details-name info">{spot.name}</p>
+        <p className="details-stars info">★{spot.avgStarRating} • {spot.numReviews} {review} • {spot.city}, {spot.state}, {spot.country}</p>
       </div>
       <div className="outer">
 
     <div className="holder">
     <div>
-      {spot.id}
     </div>
     <img className="spot-details" src={spot.SpotImages[0]? spot.SpotImages[0].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
     <img className="side-pic" src={spot.SpotImages[1]? spot.SpotImages[1].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
@@ -106,7 +105,8 @@ const DeleteReview = async (e) => {
       hidden={spotOwner ? false : true}
       >Delete Spot</button>
         </div>
-          <p>{spot.description}</p>
+          <p className="info">{spot.description}</p>
+          <p className="info">${spot.price} / night</p>
            <button hidden={!spotReviewed} onClick={DeleteReview}>Delete Review</button>
            <button hidden={spotReviewed || spotOwner || !user}
            onClick={()=> {setCreateReview(true)}}
@@ -120,8 +120,8 @@ const DeleteReview = async (e) => {
       <div className='reviews-holder'>
           { reviews.map(review =>
           <div className='reviews' key={review.id}>
-            <div>★{review.stars}, {review.User.firstName}</div>
-            <div>{review.review}</div>
+            <div className="info">★{review.stars}, {review.User.firstName}</div>
+            <div className="info">{review.review}</div>
           </div>
             )}
             </div>

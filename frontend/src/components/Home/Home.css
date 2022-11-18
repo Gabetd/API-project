@@ -56,3 +56,14 @@ input{
   color: black;
 
 }
+
+.navlink{
+  font-family: fantasy;
+  color: black;
+  text-decoration: none;
+}
+
+.info{
+  font-family: fantasy;
+  color: black;
+}

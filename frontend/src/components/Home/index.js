@@ -23,7 +23,7 @@ const Home = () => {
         <div className="outer-level">
           {Object.values(spots).map(spot => (
             <div key={spot.id} className='card-holder'>
-            <NavLink to={`/spots/${spot.id}`} >
+            <NavLink className="navlink" to={`/spots/${spot.id}`} >
                 <div className="inner-card">
                   <img className="card" src={spot.previewImage}/>
                   <div>
