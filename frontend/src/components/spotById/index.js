@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, NavLink } from 'react-router-dom'
 import { singleSpot } from "../../store/spots"
 import { Modal } from '../../context/Modal'
 import { removeASpot } from "../../store/spots"
@@ -8,6 +8,7 @@ import { deleteAReview, createAReview, getAllSpotReviews } from "../../store/rev
 import EditSpot from "../EditSpot/EditSpotForm"
 import './spotDetails.css'
 import CreateReview from "../CreateReview"
+import Rerender from "../Rerender"
 
 
 
@@ -20,11 +21,11 @@ const SpotById = () => {
   const [errors, setErrors] = useState([])
   const { spotId } = useParams()
   const spot = useSelector(state => state.spot.oneSpot)
-  const reviews = Object.values(useSelector(state => state.review.allReviews));
+  const reviews = Object.values(useSelector(state => state.review.allReviews))
   const dispatch = useDispatch()
   let spotReviewed;
   let userReview;
-  if(user) userReview =reviews.find(review => review.User.id === user.id)
+  if(user) userReview = reviews.find(review => review.User.id === user.id)
   if(user)reviews.find(review => review.User.id === user.id) ? spotReviewed = true : spotReviewed = false;
   let spotOwner;
   if(user) spotOwner= (spot.ownerId===user.id)
@@ -45,7 +46,7 @@ const SpotById = () => {
       }
       )
       if (attempt) {history.push('/')
-      setRender(!render)
+      dispatch(getAllSpotReviews(spotId))
     }
     // else console.log("failed to delete spot")
 
@@ -59,7 +60,7 @@ const DeleteReview = async (e) => {
   e.preventDefault()
   const attempt = dispatch(deleteAReview(parseInt(userReview.id)))
   if(attempt){history.push(`/Spots/${spotId}`)
-  setRender(!render)}
+  dispatch(getAllSpotReviews(spotId))}
   // console.log("success")}
   // else console.log('delete review failed')
 }
@@ -110,15 +111,17 @@ const DeleteReview = async (e) => {
       >Delete Spot</button>
         </div>
           <p>{spot.description}</p>
+          <NavLink to={`/spots/${spotId}`}>
            <button hidden={!spotReviewed} onClick={DeleteReview}>Delete Review</button>
            <button hidden={spotReviewed || spotOwner || !user}
            onClick={()=> {setCreateReview(true)}}
-      >Write a Review</button>
+           >Write a Review</button>
              {createReview && (
                <Modal onClose={() => setCreateReview(false)}>
-            <CreateReview setCreateReview={setCreateReview} />
+            <CreateReview setCreateReview={setCreateReview} user={user} />
           </Modal>
           )}
+          </NavLink>
           { reviews.map(review =>
           <div key={review.id}>
             <div>★{review.stars}, {review.User.firstName}</div>

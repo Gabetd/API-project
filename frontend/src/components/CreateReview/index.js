@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Modal } from "../../context/Modal";
-import { createAReview } from "../../store/reviews";
+import { clearReviews, createAReview } from "../../store/reviews";
 import './review.css'
+import Rerender from "../Rerender";
 
 
-function CreateReview({ setCreateReview }) {
+function CreateReview({ setCreateReview, user }) {
+  console.log("create review component running")
   const history = useHistory()
   const { spotId } = useParams()
   const dispatch = useDispatch()
@@ -14,7 +16,6 @@ function CreateReview({ setCreateReview }) {
   const [stars, setStars] = useState(0)
   const [validationErrors, setValidationErrors] = useState([]);
   const [frontErrors, setFrontErrors] = useState([])
-  const [render, setRender] = useState(false)
 
   const id = parseInt(spotId)
   useEffect(() => {
@@ -28,35 +29,37 @@ function CreateReview({ setCreateReview }) {
 
 
   let newReview
-  const onsubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    setRender(!render)
-    // console.log("payload", review, stars, id)
+
+    console.log("on submit payload", review, stars, id)
     const payload = {
       review,
       stars,
       id
     }
-    newReview = await dispatch(createAReview(payload)).catch(
+    newReview = await dispatch(createAReview(payload, user)).catch(
       async (res) => {
+        console.log('catch is running')
         const data = await res.json();
         if (data && data.errors) {
           setValidationErrors(frontErrors)
-          setValidationErrors(data.errors)
-          // console.log("data", data)
-          ;
+          setValidationErrors(data.errors);
+
         }
       }
     )
+    console.log("before clear review")
+    // await dispatch(clearReviews())
+    console.log("new Review = ", newReview)
+    // history.push(`/Spots/${spotId}`)
     setCreateReview(false)
-    history.push(`/Spots/${spotId}`)
   }
-  // console.log("new Review = ", newReview)
 
 
   return (
     <>
-      {<form className="review-modal" onSubmit={onsubmit}>
+      {<form className='base-form' >
         <label>
           <textarea
             className="text-area"
@@ -68,9 +71,6 @@ function CreateReview({ setCreateReview }) {
           >
           </textarea>
         </label>
-        <button
-          type="submit"
-        >submit Review</button>
         <label>
 
           <select
@@ -93,11 +93,15 @@ function CreateReview({ setCreateReview }) {
               <>
                 {validationErrors.map((error) => (
                   <li key={error}>{error}</li>
-                ))}
+                  ))}
               </>
             )}
           </ul>
         </div>
+            <button
+            onClick={onSubmit}
+              type="submit"
+              >submit Review</button>
       </form>}
     </>
   )

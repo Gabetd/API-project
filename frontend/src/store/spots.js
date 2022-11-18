@@ -74,20 +74,32 @@ export const currOwnerSpots = () => async dispatch => {
 }
 
 export const addASpot = (spot) => async dispatch => {
+  const { address, city, state, country, name, description, price, url} = spot;
   const response = await csrfFetch(`/api/spots`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(spot)
+    body: JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      lat: 1,
+      lng: 1,
+      name,
+      description,
+      price
+    })
   })
   if (response.ok) {
     const spot = await response.json()
-        await dispatch(singleSpot(spot.id))
+        await dispatch(addSpot(url, spot.id))
         return spot
   }
   return null
 }
 
 export const editASpot = (spot) => async dispatch => {
+  console.log("edit spot thunk")
   const response = await csrfFetch(`/api/spots/${spot.id}`, {
     method: 'PUT',
     headers: {'Content-Type':'application/json'},
@@ -97,6 +109,7 @@ export const editASpot = (spot) => async dispatch => {
     const spot = await response.json()
     await dispatch(oneSpot(spot))
     return spot
+
   }
   return null
 }
@@ -110,6 +123,7 @@ export const removeASpot = (spotId) => async dispatch => {
   }
   return null
 }
+
 
 export const addSpotImage = ({ url, id }) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${id}/images`, {
@@ -152,7 +166,7 @@ const spotReducer = (state = initialState, action) => {
       newState.oneSpot = action.spot
       return newState
     case ONE_SPOT:
-      newState = { ...state, oneSpot: {...state.oneSpot}} // change to state maybe
+      newState = { ...state, oneSpot: {...state.oneSpot}}
       newState.oneSpot = { ...action.spot }
       return newState
     case RESET_SPOT:

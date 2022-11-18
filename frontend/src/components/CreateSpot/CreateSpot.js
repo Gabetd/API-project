@@ -45,7 +45,8 @@ function CreateSpot({ setCreateModal }) {
       lat: 1,
       lng: 1,
       name, description,
-      price
+      price,
+      // url
     }
     const newSpot = await dispatch(addASpot(payload)).catch(
       async (res) => {
@@ -55,12 +56,10 @@ function CreateSpot({ setCreateModal }) {
         }
       });
       const id = newSpot.id
+      const spotImage = await dispatch(addSpotImage({url, id}))
       // console.log(id)
-    const spotImage = await dispatch(addSpotImage({url, id}))
-    history.push(`/Spots/${newSpot.id}`)
-    setCreateModal(false)
+      // setCreateModal(false)
   }
-
 
   return (
     <div>

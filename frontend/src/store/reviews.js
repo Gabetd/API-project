@@ -4,12 +4,19 @@ const GET_REVIEWS = 'review/getReviews'
 const GET_SPOT_REVIEWS = 'review/getSpotReviews'
 const CREATE_REVIEW = 'review/createReview'
 const DELETE_REVIEW = 'review/delete'
+const CLEAR_REVIEW = 'review/clearReview'
 
 
 const getReviews = (reviews) => {
   return {
     type: GET_REVIEWS,
     reviews
+  }
+}
+
+ export const clearReviews = () => {
+  return {
+    type: CLEAR_REVIEW
   }
 }
 
@@ -54,7 +61,7 @@ export const getAllSpotReviews = (spotId) => async dispatch => {
   return null
 }
 
-export const createAReview = (payload) => async dispatch => {
+export const createAReview = (payload, user) => async dispatch => {
   const { id, review, stars} = payload
   const response = await csrfFetch(`/api/spots/${id}/reviews`, {
     method: 'POST',
@@ -65,6 +72,11 @@ export const createAReview = (payload) => async dispatch => {
 
   if (response.ok) {
     const review = await response.json()
+    review.User = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName
+     }
     await dispatch(createReview(review))
     return review
   }
@@ -119,6 +131,8 @@ const reviewReducer = (state = initialState, action) => {
       delete newState.usersReviews[action.reviewId]
       return newState;
 
+    case CLEAR_REVIEW:
+      return initialState
     default:
       return state
   }

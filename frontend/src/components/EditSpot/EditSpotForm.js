@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom'
 import { editASpot } from "../../store/spots";
+import logo from '../logo/logo.png'
 
 
 
@@ -60,6 +61,7 @@ function EditSpot({ setCreateModal }) {
   return (
     <div>
       <form className='base-form' onSubmit={onsubmit}>
+        <img  className='modal-logo'src={logo} />
         <div>
           <ul>
             {validationErrors.map((error, idx) => (
