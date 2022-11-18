@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom'
 import { addASpot, addSpotImage } from "../../store/spots";
+import logo from '../logo/logo.png'
 
 
 
@@ -38,6 +39,7 @@ function CreateSpot({ setCreateModal }) {
 
 
   const onsubmit = async (e) => {
+    setCreateModal(false)
     e.preventDefault()
     const payload = {
       address, city,
@@ -45,10 +47,11 @@ function CreateSpot({ setCreateModal }) {
       lat: 1,
       lng: 1,
       name, description,
-      price,
-      // url
+      price
     }
-    const newSpot = await dispatch(addASpot(payload)).catch(
+    const newSpot = await dispatch(addASpot(payload))
+    .then(() => setCreateModal(false))
+    .catch(
       async (res) => {
         const data = await res.json();
         if (data && data.errors) {
@@ -56,14 +59,16 @@ function CreateSpot({ setCreateModal }) {
         }
       });
       const id = newSpot.id
-      const spotImage = await dispatch(addSpotImage({url, id}))
-      // console.log(id)
-      // setCreateModal(false)
+      console.log(id)
+    const spotImage = await dispatch(addSpotImage({url, id}))
+    history.push(`/Spots/${newSpot.id}`)
   }
+
 
   return (
     <div>
       <form className='base-form' onSubmit={onsubmit}>
+        <img  className='modal-logo'src={logo} />
         <div>
           <ul>
             {validationErrors.map((error, idx) => (

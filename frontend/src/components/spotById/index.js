@@ -30,12 +30,10 @@ const SpotById = () => {
   let spotOwner;
   if(user) spotOwner= (spot.ownerId===user.id)
   const history = useHistory()
-  // console.log(spotReviewed)
-  // console.log("users review = ", userReview)
 
   useEffect(() => {
     dispatch(getAllSpotReviews(spotId))
-  }, [dispatch])
+  }, [dispatch, spotId, reviews.length])
 
   const DeleteSpot = async (e) => {
     e.preventDefault()
@@ -48,7 +46,6 @@ const SpotById = () => {
       if (attempt) {history.push('/')
       dispatch(getAllSpotReviews(spotId))
     }
-    // else console.log("failed to delete spot")
 
   }
 let review = "review"
@@ -61,13 +58,11 @@ const DeleteReview = async (e) => {
   const attempt = dispatch(deleteAReview(parseInt(userReview.id)))
   if(attempt){history.push(`/Spots/${spotId}`)
   dispatch(getAllSpotReviews(spotId))}
-  // console.log("success")}
-  // else console.log('delete review failed')
 }
 
   useEffect(() => {
     dispatch(singleSpot(+spotId))
-  }, [dispatch, spotId])
+  }, [dispatch, spotId, reviews])
 
   if(!spot || !spot.SpotImages){
     return null

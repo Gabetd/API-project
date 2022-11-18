@@ -1,11 +1,12 @@
 // frontend/src/components/SignupFormPage/index.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 import './SignupForm.css';
+import logo from '../logo/logo.png'
 
-function SignupForm() {
+function SignupForm({setShowModal}) {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const [firstName, setFirstName] = useState("");
@@ -15,14 +16,30 @@ function SignupForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const [frontErrs, setFrontErrs] = useState([])
 
   if (sessionUser) return <Redirect to="/" />;
+
+
+  // useEffect(() => {
+  //   const errs = []
+  //   if (!firstName) errs.push('Name required')
+  //   if (!lastName) errs.push('Last name required')
+  //   if (!email) errs.push('Email required')
+  //   if (!username) errs.push('Username required')
+  //   if (!password) errs.push('Password required')
+  //   if (!confirmPassword) errs.push('Please confirm password')
+  //   if (password !== confirmPassword) errs.push('Passwords do not match')
+  //   setFrontErrs(errs)
+  // }, [firstName, lastName, email, username, password, confirmPassword])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       setErrors([]);
       return dispatch(sessionActions.signup({ firstName, lastName, email, username, password }))
+      .then(() => setShowModal(false))
         .catch(async (res) => {
           const data = await res.json();
           if (data && data.errors) setErrors(data.errors);
@@ -31,8 +48,16 @@ function SignupForm() {
     return setErrors(['Confirm Password field must be the same as the Password field']);
   };
 
+
+
+
+
+
+
+
   return (
     <form className='base-form' onSubmit={handleSubmit}>
+       <img  className='modal-logo'src={logo} />
       <ul>
         {errors.map((error, idx) => <li key={idx}>{error}</li>)}
       </ul>

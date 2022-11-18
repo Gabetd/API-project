@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Modal } from "../../context/Modal";
 import { clearReviews, createAReview } from "../../store/reviews";
 import './review.css'
-import Rerender from "../Rerender";
+import logo from '../logo/logo.png'
 
 
 function CreateReview({ setCreateReview, user }) {
@@ -14,16 +14,16 @@ function CreateReview({ setCreateReview, user }) {
   const dispatch = useDispatch()
   const [review, setReview] = useState('')
   const [stars, setStars] = useState(0)
-  const [validationErrors, setValidationErrors] = useState([]);
-  const [frontErrors, setFrontErrors] = useState([])
+  const [errors, setErrors] = useState([]);
+
 
   const id = parseInt(spotId)
   useEffect(() => {
-    const errors = []
-    if (review.length > 250) errors.push('Can not exceed 250 characters');
-    if (review.length === 0) errors.push("Can not submit and empty Review")
-    setFrontErrors(errors)
-    if (stars > 5 || stars < 1) errors.push('Stars must be a number between 1 and 5')
+    const errs = []
+    if (review.length > 250) errs.push('Can not exceed 250 characters');
+    if (review.length === 0) errs.push("Can not submit and empty Review")
+    setErrors(errs)
+    if (stars > 5 || stars < 1) errs.push('Stars must be a number between 1 and 5')
   }, [review, stars])
 
 
@@ -38,14 +38,14 @@ function CreateReview({ setCreateReview, user }) {
       stars,
       id
     }
-    newReview = await dispatch(createAReview(payload, user)).catch(
+    newReview = await dispatch(createAReview(payload, user))
+    .then(() => setCreateReview(false))
+    .catch(
       async (res) => {
         console.log('catch is running')
         const data = await res.json();
         if (data && data.errors) {
-          setValidationErrors(frontErrors)
-          setValidationErrors(data.errors);
-
+          setErrors(errors, data.errors);
         }
       }
     )
@@ -60,6 +60,12 @@ function CreateReview({ setCreateReview, user }) {
   return (
     <>
       {<form className='base-form' >
+      <img  className='modal-logo'src={logo} />
+        <ul>
+          {errors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ul>
         <label>
           <textarea
             className="text-area"
@@ -88,20 +94,11 @@ function CreateReview({ setCreateReview, user }) {
           Stars
         </label>
         <div className="errors">
-          <ul>
-            {validationErrors.length > 0 && (
-              <>
-                {validationErrors.map((error) => (
-                  <li key={error}>{error}</li>
-                  ))}
-              </>
-            )}
-          </ul>
         </div>
-            <button
-            onClick={onSubmit}
-              type="submit"
-              >submit Review</button>
+        <button
+          onClick={onSubmit}
+          type="submit"
+        >submit Review</button>
       </form>}
     </>
   )

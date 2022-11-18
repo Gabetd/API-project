@@ -1,29 +1,47 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { useParams } from "react-router-dom";
 
 
-function AddImage() {
+// function AddImage({setCreateImage}) {
+//   const [url, setUrl] = useState('')
+//   const [errors, setErrors] = useState([])
+//   const { spotId } = useParams();
 
-  const [url, setUrl] = useState('')
-  const { spotId } = useParams();
 
-  return (
-    <>
-      <form className="base-form">
-        <label>
-          Image Url
-          <input
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Add Image</button>
-      </form>
-    </>
-  )
+//   useEffect(() => {
+//     if(!url) setErrors(["please input a url"])
+//   }, [url])
 
-}
+//   const onSubmit = await (e) => {
+//     e.preventdefault();
 
-export default AddImage;
+
+//   }
+
+
+
+//   return (
+//     <>
+//       <form className="base-form">
+//       <ul>
+//         {errors.map((error, idx) => (
+//           <li key={idx}>{error}</li>
+//         ))}
+//       </ul>
+//         <label>
+//           Image Url
+//           <input
+//             type="text"
+//             value={url}
+//             onChange={(e) => setUrl(e.target.value)}
+//             required
+//           />
+//         </label>
+//         <button type="submit">Add Image</button>
+//       </form>
+//     </>
+//   )
+
+// }
+
+// export default AddImage;
