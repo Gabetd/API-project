@@ -335,8 +335,7 @@ router.put('/:spotId', requireAuth, async (req, res) => {
     spot.name = name;
     spot.description = description;
     spot.price = price;
-    res.status(200);
-    res.json(spot)
+
   }catch(e){
     res.status(400);
     const errors = {}
@@ -355,6 +354,9 @@ router.put('/:spotId', requireAuth, async (req, res) => {
       errors: errors
       });
     };
+    await spot.update({ address, city, state, country, lat, lng, name, description, price })
+    // res.status(200);
+    res.json(spot)
 });
 
 

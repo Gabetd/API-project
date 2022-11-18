@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom'
 import { editASpot } from "../../store/spots";
+import { singleSpot } from "../../store/spots"
 import logo from '../logo/logo.png'
 
 
@@ -22,6 +23,7 @@ function EditSpot({ setEditModal }) {
   const [description, setDescription] = useState(spot.description || "")
   const [price, setPrice] = useState(spot.price || "")
   const [errors, setErrors] = useState([]);
+
 
   useEffect(() => {
     const err = []
@@ -45,11 +47,10 @@ function EditSpot({ setEditModal }) {
       lng: 1,
       name, description,
       price,
-      previewImage: spot.previewImage
     }
 
-    const editSpot = await dispatch(editASpot(payload, spot.id))
-    setEditModal(false)
+    const editSpot = await dispatch(editASpot(payload))
+    // .then(() => dispatch(singleSpot(payload.id)))
     // .catch(
     //   async (res) => {
     //     const data = await res.json();
@@ -57,70 +58,77 @@ function EditSpot({ setEditModal }) {
     //       setErrors(data.errors)
     //     }
     //   });
-    history.push(`/Spots/${spot.id}`)
+    if (editSpot) {
+
+      setEditModal(false)
+      history.push(`/Spots/${spot.id}`)
+    }
   }
 
 
   return (
     <div>
       <form className='base-form' onSubmit={onsubmit}>
-        <img  className='modal-logo'src={logo} />
+        <img className='modal-logo' src={logo} />
         <div>
           <ul>
             {errors.length > 0 && errors.map((error) => (
               <li key={error}>{error}</li>))}
           </ul>
         </div>
-        <label>Address
+        <label>
           <input
             type="text"
+            placeholder="Address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
         </label>
-        <label>City
+        <label>
           <input
             type="text"
+            placeholder="City"
             value={city}
             onChange={(e) => setCity(e.target.value)}
           />
         </label>
-        <label>State
+        <label>
           <input
             type="text"
+            placeholder="State"
             value={state}
             onChange={(e) => setState(e.target.value)}
           />
         </label>
         <label>
-          Country
           <input
             type="text"
+            placeholder="Country"
             value={country}
             onChange={(e) => setCountry(e.target.value)}
           />
         </label>
         <label>
-          Name
           <input
             type="text"
+            placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </label>
         <label>
-          Description
           <input
             type="text"
+            placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             max={120}
           />
         </label>
         <label>
-          Price
           <input
             type="number"
+            placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
@@ -136,7 +144,7 @@ function EditSpot({ setEditModal }) {
             required
           />
         </label> */}
-        <button type="submit" hidden={errors.length !== 0}>Edit Spot</button>
+        <button className="submit" type="submit" hidden={errors.length !== 0}>Edit Spot</button>
       </form>
     </div>
   )

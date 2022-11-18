@@ -47,25 +47,25 @@ function LoginForm({ setShowModal }) {
         ))}
       </ul>
       <label>
-        Username or Email
         <input
           type="text"
+          placeholder="Username or Email"
           value={credential}
           onChange={(e) => setCredential(e.target.value)}
           required
         />
       </label>
       <label>
-        Password
         <input
           type="password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
       </label>
-      <button type="submit" >Log In</button>
-      <button type='submit' onClick={demoLogin}>Log In as Demo User</button>
+      <button className="submit" type="submit" >Log In</button>
+      <button className="submit" type='submit' onClick={demoLogin}>Log In as Demo User</button>
     </form>
   );
 }

@@ -120,6 +120,12 @@ export const editASpot = (spot) => async (dispatch) => {
 
 if (res.ok) {
     const data = await res.json();
+    // data.Owner = {
+    //   id: user.id,
+    //   firstName: user.firstName,
+    //   lastName: user.lastName
+    // }
+    // data.SpotImages = spotImages
     console.log("data from edit = ", data)
     await dispatch(editSpot(data));
     return data;
@@ -183,8 +189,14 @@ const spotReducer = (state = initialState, action) => {
       console.log("create state = ",newState.oneSpot)
       return newState
       case EDIT_SPOT:
-        newState={...state}
-        newState.oneSpot = { ...newState[action.spot.id], ...action.spot };
+        newState = {...state, oneSpot: {...state.oneSpot}}
+        newState.oneSpot.address = action.spot.address
+        newState.oneSpot.city = action.spot.city
+        newState.oneSpot.state = action.spot.state
+        newState.oneSpot.country = action.spot.country
+        newState.oneSpot.name = action.spot.name
+        newState.oneSpot.description = action.spot.description
+        newState.oneSpot.price = action.spot.price
         return newState;
     case ONE_SPOT:
       newState = { ...state, oneSpot: {...state.oneSpot}}

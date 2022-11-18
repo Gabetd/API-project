@@ -82,7 +82,7 @@ function CreateReview({ setCreateReview, user }) {
             onChange={(e) => setStars(e.target.value)}
             required
           >
-            <option></option>
+            <option>Stars</option>
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -94,6 +94,7 @@ function CreateReview({ setCreateReview, user }) {
         <div className="errors">
         </div>
         <button
+          className="submit"
           onClick={onSubmit}
           hidden={errors.length !== 0}
           type="submit"

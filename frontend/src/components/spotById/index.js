@@ -8,7 +8,7 @@ import { deleteAReview, createAReview, getAllSpotReviews } from "../../store/rev
 import EditSpot from "../EditSpot/EditSpotForm"
 import './spotDetails.css'
 import CreateReview from "../CreateReview"
-import Rerender from "../Rerender"
+
 
 
 
