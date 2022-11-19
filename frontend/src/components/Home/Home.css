@@ -1,9 +1,9 @@
 .card {
   justify-content: center;
   width: 100%;
-  height: 50%;
-  background-color: aqua;
-  border-radius: 20%;
+  height: 202px;
+  /* background-color: aqua; */
+  border-radius: 30px;
 }
 .card-holder{
   display: flex;
@@ -13,10 +13,11 @@
   width: 30%;
   height: 20%;
   background-color: whitesmoke;
-  border-radius: 20%;
+  border-radius: 45px;
 }
 .outer-level {
   width: 75%;
+  margin-top: 70px;
   margin-right: 12.5%;
   margin-left: 12.5%;
   display: flex;
@@ -24,7 +25,7 @@
   background-color: rgb(235, 235, 235);
   justify-content: center;
 
-  border-radius: 5%;
+  border-radius: 45px;
 }
 .housing {
   justify-content: center;
@@ -66,4 +67,145 @@ input{
 .info{
   font-family: fantasy;
   color: black;
+}
+
+.modal-logo{
+  /* margin-left: 10%; */
+  border-radius: 45px;
+}
+
+.spot-image {
+  width: 40%;
+  height: 250px;
+}
+
+.side-pic {
+  flex-wrap: wrap;
+  height: 27%;
+  width: 27.5%;
+  margin-left: 0.5%;
+  border: solid grey 0.1px;
+}
+
+.outer{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: whitesmoke;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+}
+
+.holder {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  height: 70%;
+  justify-content: flex-start;
+  align-items: center;
+
+}
+
+.outer-most {
+  width: 72.3%;
+  height: 50%;
+  background-color: whitesmoke;
+  border: solid grey 0.1px;
+  margin-left: 10%;
+  margin-top: 70px;
+  margin-right: 10%;
+  justify-content: center;
+  border-radius: 45px;
+  flex-direction: row;
+  padding: 3%;
+}
+
+/* #root {
+  justify-content: center;
+} */
+
+button{
+  /* margin: 5px; */
+  padding: 5px;
+  border-radius: 10px;
+  background-color: whitesmoke;
+}
+
+.reviews-holder{
+  width: 100%;
+  height: 20%;
+  margin-left: 20%;
+  justify-content: center;
+}
+
+.base-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items:center;
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 20%;
+  -moz-border-radius: 20%;
+  border-radius: 20%;
+}
+
+.images{
+  display: flex;
+  flex-direction: row;
+  /* flex-wrap: wrap; */
+}
+
+.details-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+#logo {
+  margin-top: 40%;
+  width: 80px;
+  height: 25px;
+}
+
+#topBar{
+  display: flex;
+  width: 69.420%;
+  margin-left: 10%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.icons {
+  display: flex;
+  justify-content: right;
+  flex-direction: row-reverse;
+}
+
+.profile-dropdown {
+  border: solid grey 0.1px;
+  border-radius: 10px;
+}
+
+.li {
+  border-bottom: solid white 0.1px;
+  justify-content: left;
+}
+ul {
+  list-style: none;
+  justify-content: left;
+}
+
+.uniform {
+  width: 100%;
+}
+
+.dropdown-housing{
+  position: absolute;
+}
+.user-button{
+  width: 150px;
 }

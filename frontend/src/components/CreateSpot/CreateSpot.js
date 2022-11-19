@@ -33,8 +33,9 @@ function CreateSpot({ setCreateModal }) {
     if (!name) err.push('Name is required')
     if (!description) err.push('Description is required')
     if (!price) err.push('Price per night is required')
+    if (!url) err.push('please provide an image url')
     setErrors(err)
-  }, [address, city, state, country, name, description, price])
+  }, [address, city, state, country, name, description, price, url])
 
 
 // let newSpot

@@ -37,6 +37,8 @@ function ProfileButton({ user, setLogin, setShowModal }) {
 
   return (
     <div className="top-bar">
+      <div className="dropdown-housing">
+
       <button className="user-button" onClick={openMenu}>
       ≡ <i className="fas fa-user-circle" />
       </button>
@@ -53,7 +55,7 @@ function ProfileButton({ user, setLogin, setShowModal }) {
             <li className="li">
               <button
               className="uniform"
-                onClick={() => {
+              onClick={() => {
                 setLogin(true)
                 setShowModal(true)
               }}>Log In</button>
@@ -62,14 +64,15 @@ function ProfileButton({ user, setLogin, setShowModal }) {
             <button
                 className="uniform"
                 onClick={() => {
-                setLogin(false)
-                setShowModal(true)
-              }}>Sign Up</button>
+                  setLogin(false)
+                  setShowModal(true)
+                }}>Sign Up</button>
             </li>
           </ul>
         )
 
         )}
+      </div>
     </div>
   );
 }

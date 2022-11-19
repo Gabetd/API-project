@@ -4,6 +4,7 @@ import { useParams, useHistory, NavLink } from 'react-router-dom'
 import { singleSpot } from "../../store/spots"
 import { Modal } from '../../context/Modal'
 import { removeASpot } from "../../store/spots"
+import { getAllSpots } from "../../store/spots"
 import { deleteAReview, createAReview, getAllSpotReviews } from "../../store/reviews"
 import EditSpot from "../EditSpot/EditSpotForm"
 import './spotDetails.css'
@@ -43,8 +44,8 @@ const SpotById = () => {
       }
       )
       if (attempt) {
-
-        history.push('/')
+        const action = await dispatch(getAllSpots())
+        .then(() => history.push('/'))
     }
 
   }
@@ -56,7 +57,7 @@ review = "review"
 const DeleteReview = async (e) => {
   e.preventDefault()
   const attempt = dispatch(deleteAReview(parseInt(userReview.id)))
-  if(attempt){history.push(`/Spots/${spotId}`)
+  if(attempt){history.push(`/spots/${spotId}`)
   dispatch(getAllSpotReviews(spotId))}
 }
 
@@ -69,7 +70,7 @@ const DeleteReview = async (e) => {
   }
   // console.log(spot)
   return (
-    <div>
+    <div className="details-page">
 
     <div className="outer-most">
       <div className="spot-details info">
@@ -79,16 +80,18 @@ const DeleteReview = async (e) => {
       <div className="outer">
 
     <div className="holder">
+    <div className="images">
+    <img className="spot-image" src={spot.SpotImages[0]? spot.SpotImages[0].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
     <div>
-    </div>
-    <img className="spot-details" src={spot.SpotImages[0]? spot.SpotImages[0].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
+      <div>
     <img className="side-pic" src={spot.SpotImages[1]? spot.SpotImages[1].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
     <img className="side-pic" src={spot.SpotImages[2]? spot.SpotImages[2].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
+    </div>
+    <div>
     <img className="side-pic" src={spot.SpotImages[3]? spot.SpotImages[3].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
     <img className="side-pic" src={spot.SpotImages[4]? spot.SpotImages[4].url : 'https://media.istockphoto.com/id/1354776450/vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-for-web-site-or.jpg?b=1&s=170667a&w=0&k=20&c=nJh9cII84Q57vTIKkyRC1e1xEG-_AxA2Zp8Wkwy8OEE='}/>
-    <div>
-    <div>
     </div>
+      </div>
     </div>
     </div>
       </div>
@@ -121,7 +124,9 @@ const DeleteReview = async (e) => {
       <div className='reviews-holder'>
           { reviews.map(review =>
           <div className='reviews' key={review.id}>
-            <div className="info">★{review.stars}, {review.User.firstName}</div>
+            <div className="info">★{review.stars}, {review.User.firstName}
+             {/* {(review.id === userReview.id) && <button onClick={DeleteReview}>Delete Review</button>} */}
+            </div>
             <div className="info">{review.review}</div>
           </div>
             )}
