@@ -49,10 +49,6 @@ const SpotById = () => {
     }
 
   }
-let review = "review"
-if (spot.numReviews > 1){
-review = "review"
-}
 
 const DeleteReview = async (e) => {
   e.preventDefault()
@@ -75,7 +71,7 @@ const DeleteReview = async (e) => {
     <div className="outer-most">
       <div className="spot-details info">
         <p className="details-name info">{spot.name}</p>
-        <p className="details-stars info">★{spot.avgStarRating} • {spot.numReviews} {review} • {spot.city}, {spot.state}, {spot.country}</p>
+        <p className="details-stars info">★{spot.avgStarRating} • {spot.numReviews} Reviews • {spot.city}, {spot.state}, {spot.country}</p>
       </div>
       <div className="outer">
 
@@ -109,7 +105,8 @@ const DeleteReview = async (e) => {
       hidden={spotOwner ? false : true}
       >Delete Spot</button>
         </div>
-          <p className="info">{spot.description}</p>
+          <p className="info">Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
+          <p className="info-description">{spot.description}</p>
           <p className="info">${spot.price} / night</p>
            <button hidden={!spotReviewed} onClick={DeleteReview}>Delete Review</button>
            <button hidden={spotReviewed || spotOwner || !user}
@@ -122,6 +119,7 @@ const DeleteReview = async (e) => {
           )}
       </div>
       <div className='reviews-holder'>
+        <p className="details-name">★{spot.avgStarRating} • {spot.numReviews} Reviews</p>
           { reviews.map(review =>
           <div className='reviews' key={review.id}>
             <div className="info">★{review.stars}, {review.User.firstName}
