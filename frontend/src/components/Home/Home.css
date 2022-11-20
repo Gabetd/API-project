@@ -82,7 +82,8 @@ input{
 .side-pic {
   flex-wrap: wrap;
   height: 120px;
-  width: 27.5%;
+  width: 40%;
+  /* width: auto; */
   margin-left: 0.5%;
   border: solid grey 0.1px;
 }
