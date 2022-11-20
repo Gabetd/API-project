@@ -81,7 +81,7 @@ input{
 
 .side-pic {
   flex-wrap: wrap;
-  height: 27%;
+  height: 120px;
   width: 27.5%;
   margin-left: 0.5%;
   border: solid grey 0.1px;
@@ -172,6 +172,7 @@ button{
 }
 
 #topBar{
+  position: sticky;
   display: flex;
   width: 69.420%;
   margin-left: 10%;
