@@ -58,6 +58,10 @@ input{
 
 }
 
+.submit:hover{
+  background-color: rgba(00, 235, 235, 0.8);
+}
+
 .navlink{
   font-family: fantasy;
   color: black;
@@ -133,6 +137,10 @@ button{
   border-radius: 10px;
   background-color: whitesmoke;
 }
+button:hover{
+  background-color: rgba(0, 0, 0, 0.1)
+}
+
 
 .reviews-holder{
   width: 100%;
@@ -151,6 +159,7 @@ button{
   -webkit-border-radius: 20%;
   -moz-border-radius: 20%;
   border-radius: 20%;
+  padding-bottom: 20px;
 }
 
 .images{
