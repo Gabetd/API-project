@@ -196,10 +196,10 @@ button:hover{
   flex-direction: row-reverse;
 }
 
-.profile-dropdown {
+/* .profile-dropdown {
   border: solid grey 0.1px;
   border-radius: 10px;
-}
+} */
 
 .li {
   border-bottom: solid white 0.1px;
@@ -218,7 +218,7 @@ ul {
   position: absolute;
 }
 .user-button{
-  width: 150px;
+  width: 130px;
 }
 
 .details-name{
